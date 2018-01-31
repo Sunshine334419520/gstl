@@ -4,13 +4,13 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_construct.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-01-27T16:47:41+08:00
+ * @Last modified time: 2018-01-31T20:42:11+08:00
  */
 
 #ifndef __STL_SIMPLE_CONSTRUCT_H
 #define __STL_SIMPLE_CONSTRUCT_H
 
-#include <new.h>
+#include <new>
 
 __STL_SIMPLE_BEGIN_NAMESPACE    //namespace name
 
@@ -25,7 +25,7 @@ inline void Destroy(T *pointer)
 template <class T1, class T2>
 inline void Construct(T1 *pointer, T2 &value)
 {
-  new (p) T(value);
+  new (pointer) T(value);
 }
 
 // another version of Destroy, receive two Iterator.
@@ -70,7 +70,7 @@ inline void Destroy(char*, char*)
 
 // specialized version of the Destroy, For Iterator is w_char_t*, w_char_t*
 __STL_TEMPLATE_NULL
-inline void Destroy(w_char_t*, wchar_t*)
+inline void Destroy(wchar_t*, wchar_t*)
 {
 }
 
