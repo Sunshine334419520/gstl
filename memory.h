@@ -4,15 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: memory.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-04T16:44:33+08:00
+ * @Last modified time: 2018-02-26T15:01:20+08:00
  */
 
-#ifndef STL_SIMPLE_MEMORY_H
-#define STL_SIMPLE_MEMORY_H
+#ifndef GSTL_MEMORY_H
+#define GSTL_MEMORY_H
 
 #include <utility>
 
-__STL_SIMPLE_BEGIN_NAMESPACE
+__GSTL_BEGIN_NAMESPACE
 
 template <class T>
 struct defaule_delete {
@@ -38,13 +38,13 @@ public:
   unique_ptr& operator=(const unique_ptr&) = delete;
 
   unique_ptr(unique_ptr&& up) : data_(nullptr)
-  {   __STL_SIMPLE::swap(up.data_, this->data_); }
+  {   __GSTL::swap(up.data_, this->data_); }
 
   unique_ptr& operator=(unique_ptr&& up)
   {
     if(&up != this) {
       clean();
-      __STL_SIMPLE::swap(up, *this);
+      __GSTL::swap(up, *this);
     }
     return *this;
   }
@@ -62,7 +62,7 @@ public:
   pointer release()
   {
 			T *p = nullptr;
-			__STL_SIMPLE::swap(p, data_);
+			__GSTL::swap(p, data_);
 			return p;
 	}
 

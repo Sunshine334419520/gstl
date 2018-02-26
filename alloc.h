@@ -4,11 +4,11 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_alloc.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-01-31T20:50:54+08:00
+ * @Last modified time: 2018-02-26T14:59:05+08:00
  */
 
-#ifndef __STL_SIMPLE_ALLOC_H
-#define __STL_SIMPLE_ALLOC_H
+#ifndef __GSTL_ALLOC_H
+#define __GSTL_ALLOC_H
 
 #if 0
   #include <new>
@@ -23,7 +23,7 @@
 #include <cstring>
 #include "config.h"
 
-__STL_SIMPLE_BEGIN_NAMESPACE
+__GSTL_BEGIN_NAMESPACE
 //namespace simple_stl {
 
 template <int inst>
@@ -335,6 +335,6 @@ public:
   }
 };
 
-__STL_SIMPLE_END_NAMESPACE
+__GSTL_END_NAMESPACE
 
 #endif

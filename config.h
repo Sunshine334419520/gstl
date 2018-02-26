@@ -4,10 +4,10 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_config.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-01-31T20:19:04+08:00
+ * @Last modified time: 2018-02-26T16:43:48+08:00
  */
-#ifndef __STL_SIMPLE_CONFIG_H
-#define __STL_SIMPLE_CONFIG_H
+#ifndef __GSTL_CONFIG_H
+#define __GSTL_CONFIG_H
 
 
 
@@ -21,16 +21,12 @@
  #   define __STL_NULL_TMPL_ARGS
  # endif
 
- # ifdef __STL_CLASS_PARTIAL_SPECIALIZATION
- #   define __STL_TEMPLATE_NULL template<>
- # else
- #   define __STL_TEMPLATE_NULL
- # endif
+ #define __STL_TEMPLATE_NULL template<>
 
 
-# define __STD_SIMPLE simple_stl
-# define __STL_SIMPLE_BEGIN_NAMESPACE namespace simple_stl {
-# define __STL_SIMPLE_END_NAMESPACE }
+# define __GSTL gstl
+# define __GSTL_BEGIN_NAMESPACE namespace gstl {
+# define __GSTL_END_NAMESPACE }
 
 
 

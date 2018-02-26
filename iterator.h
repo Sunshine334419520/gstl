@@ -7,13 +7,13 @@
  * @Last modified time: 2018-02-04T16:43:31+08:00
  */
 
-#ifndef STL_SIMPLE_ITERATOR_H
-#define STL_SIMPLE_ITERATOR_H
+#ifndef GSTL_ITERATOR_H
+#define GSTL_ITERATOR_H
 
 #include <cstddef>
 
 
-__STL_SIMPLE_BEGIN_NAMESPACE
+__GSTL_BEGIN_NAMESPACE
 
 struct input_iterator_tag {};
 struct output_iterator_tag {};
@@ -149,6 +149,6 @@ advance(InputIterator& first, Distance n)
   __advance(first, n, iterator_category(first));
 }
 
-__STL_SIMPLE_END_NAMESPACE
+__GSTL_END_NAMESPACE
 
 #endif

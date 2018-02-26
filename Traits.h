@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Traits.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-04T16:44:23+08:00
+ * @Last modified time: 2018-02-26T16:47:45+08:00
  */
 
 
@@ -172,7 +172,7 @@
 
 
  // 针对char *, signed char *, unsigned char *提供特化
-
+ __STL_TEMPLATE_NULL
  struct __type_traits<char*>
  {
     typedef __true_type    has_trivial_default_constructor;
@@ -182,6 +182,7 @@
     typedef __true_type    is_POD_type;
  };
 
+ __STL_TEMPLATE_NULL
  struct __type_traits<signed char*>
  {
     typedef __true_type    has_trivial_default_constructor;
@@ -191,6 +192,7 @@
     typedef __true_type    is_POD_type;
  };
 
+ __STL_TEMPLATE_NULL
  struct __type_traits<unsigned char*>
  {
     typedef __true_type    has_trivial_default_constructor;

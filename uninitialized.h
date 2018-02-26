@@ -4,15 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: uninitialized.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-02T21:15:54+08:00
+ * @Last modified time: 2018-02-26T18:05:25+08:00
  */
 
-#ifndef STL_SIMPLE_UNINITIALIZED_H
-#define STL_SIMPLE_UNINITIALIZED_H
+#ifndef GSTL_UNINITIALIZED_H
+#define GSTL_UNINITIALIZED_H
 
 #include <cstring>
 
-__STL_SIMPLE_BEGIN_NAMESPACE
+__GSTL_BEGIN_NAMESPACE
 
 template <class InputIterator, class ForwardIterator>
 inline ForwardIterator
@@ -47,7 +47,7 @@ __uninitialized_copy(InputIterator first, InputIterator last,
   return __uninitialized_copy_aux(first, last, result, is_POD());
 }
 
-template <class InputIterator, class ForwordIterator>
+template <class InputIterator, class ForwardIterator>
 inline ForwardIterator
 __uninitialized_copy_aux(InputIterator first, InputIterator last,
                          ForwardIterator result, __true_type)
@@ -55,7 +55,7 @@ __uninitialized_copy_aux(InputIterator first, InputIterator last,
   return copy(first, last, result);
 }
 
-template <class InputIterator, class ForwordIterator>
+template <class InputIterator, class ForwardIterator>
 inline ForwardIterator
 __uninitialized_copy_aux(InputIterator first, InputIterator last,
                          ForwardIterator result, __false_type)
@@ -132,7 +132,7 @@ __uninitialized_fill_n_aux(ForwardIterator first, Size n, const T& x, __true_typ
 
 template <class ForwardIterator, class Size, class T>
 inline ForwardIterator
-__uninitialized_fill_n_aux(ForwardIterator first, Size n, const T& x, __true_type)
+__uninitialized_fill_n_aux(ForwardIterator first, Size n, const T& x, __false_type)
 {
   ForwardIterator cur = first;
 
@@ -144,6 +144,6 @@ __uninitialized_fill_n_aux(ForwardIterator first, Size n, const T& x, __true_typ
 }
 
 
-__STL_SIMPLE_END_NAMESPACE
+__GSTL_END_NAMESPACE
 
 #endif
