@@ -4,10 +4,10 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_config.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-26T16:43:48+08:00
+ * @Last modified time: 2018-02-27T16:12:42+08:00
  */
-#ifndef __GSTL_CONFIG_H
-#define __GSTL_CONFIG_H
+#ifndef GSTL_CONFIG_H
+#define GSTL_CONFIG_H
 
 
 

@@ -4,11 +4,11 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_alloc.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-26T14:59:05+08:00
+ * @Last modified time: 2018-02-27T16:12:31+08:00
  */
 
-#ifndef __GSTL_ALLOC_H
-#define __GSTL_ALLOC_H
+#ifndef GSTL_ALLOC_H
+#define GSTL_ALLOC_H
 
 #if 0
   #include <new>
