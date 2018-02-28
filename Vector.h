@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: gvector.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-26T19:00:24+08:00
+ * @Last modified time: 2018-02-28T17:17:54+08:00
  */
 
 #ifndef GSTL_VECTOR_H
@@ -12,9 +12,11 @@
 
 #include "allocate.h"
 #include "Uninitialized.h"
+#include "iterator.h"
+#include "Algorithm.h"
+#include "reverseiterator.h"
 
-__GSTL_BEGIN_NAMESPACE
-
+__GSTL_BEGIN_NAMESPACE      //namespace gstl {
 
 template <class T, class Alloc = alloc>
 class Vector {
@@ -29,10 +31,14 @@ public:
   typedef const value_type*   const_pointer;
   typedef const value_type*   const_iterator;
 
+  typedef reverse_iterator<const_iterator>    const_reverse_iterator;
+  typedef reverse_iterator<iterator>          reverse_iterator;
+
 protected:
   typedef SimpleAlloc<value_type, Alloc>  data_allocator;
 
 public:
+  //构造析构复制函数
   Vector() : start_(nullptr), finish_(nullptr), end_of_storage_(nullptr) {}
   Vector(size_type n, const T& value) { fill_initialize(n, value); }
   Vector(int n, const T& value) { fill_initialize(n, value); }
@@ -44,6 +50,8 @@ public:
     finish_ = start_ + (vec.end() - vec.begin());
     end_of_storage_ = finish_;
   }
+  Vector<T, Alloc>& operator=(const Vector<T, Alloc>& vec);
+
 
   Vector(const Vector<T, Alloc>&& vec) :
     start_(nullptr), finish_(nullptr), end_of_storage_(nullptr) {
@@ -56,17 +64,6 @@ public:
     vec.end_of_storage_ = nullptr;
   }
 
-  Vector<T, Alloc>& operator=(const Vector<T, Alloc>& vec) {
-    if (&vec != this) {
-      Destroy(start_, finish_);
-      deallocate();
-
-      start_ = allocate_and_copy(vec.end() - vec.begin(), vec.begin(), vec.end());
-      finish_ = start_ + (vec.end() - vec.begin());
-      end_of_storage_ = finish_;
-    }
-    return *this;
-  }
 
   Vector<T, Alloc>& operator=(const Vector<T, Alloc>&& vec) {
     if(&vec != this) {
@@ -83,6 +80,14 @@ public:
     }
   }
 
+  //区间构造函数
+  template <class InputIterator>
+  Vector(InputIterator first, InputIterator last) :
+  start_(nullptr), finish_(nullptr), end_of_storage_(nullptr)
+  {
+    range_initialize(first, last, iterator_category(first));
+  }
+
   ~Vector() {
     Destroy(start_, finish_);
     deallocate();
@@ -94,8 +99,14 @@ public:
   iterator end() { return finish_; }
   const_iterator begin() const { return start_; }
   const_iterator end() const {return finish_; }
+  //只读迭代器
   const_iterator cbegin() const { return start_; }
   const_iterator cend() const { return finish_; }
+  //反转迭代器
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
+  const_reverse_iterator rcbegin() { return const_reverse_iterator(end()); }
+  const_reverse_iterator rcend() { return const_reverse_iterator(begin()); }
 
 
 
@@ -113,6 +124,19 @@ public:
   reference back() { return *(end() - 1); }
   const_reference front() const {  return *cbegin(); }
   const_reference back() const { return *(cend() - 1); }
+
+  void reserve(size_type n) {
+    if (n > capacity()) {
+      size_type old_size = size();
+      iterator tmp = allocate_and_copy(n, start_, finish_);
+      Destory(start_, finish_);
+      deallocate();
+
+      start_ = tmp;
+      finish_ = start_ + old_size;
+      end_of_storage_ = start_ + n;
+    }
+  }
 
   void push_back(const T& x) {
     if (finish_ != end_of_storage_) {
@@ -194,6 +218,7 @@ protected:
     } catch(...) {
       data_allocator::Deallocate(result, n);
     }
+    return nullptr;
 
   }
 
@@ -209,6 +234,25 @@ protected:
 
   }
 
+  template <class InputIterator>
+  void range_initialize(InputIterator first, InputIterator last,
+                        input_iterator_tag)
+  {
+    for ( ; first != last; first++)
+      push_back(*first);
+  }
+
+  template <class ForwardIterator>
+  void range_initialize(ForwardIterator first, ForwardIterator last,
+                        forward_iterator_tag)
+  {
+    difference_type n = distance(first, last);
+    start_ = allocate_and_copy(n, first, last);
+    finish_ = start_ + n;
+    end_of_storage_ = finish_;
+
+  }
+
   void insert_aux(iterator position, const T& x);
 
 
@@ -218,6 +262,30 @@ protected:
   iterator end_of_storage_;
 
 };
+
+template <class T, class Alloc>
+Vector<T, Alloc>& Vector<T,Alloc>::operator=(const Vector<T, Alloc>& vec)
+{
+  if (&vec != this) {
+    if (capacity() < vec.size()) {
+    Destroy(start_, finish_);
+    deallocate();
+
+    start_ = allocate_and_copy(vec.end() - vec.begin(), vec.begin(), vec.end());
+    //finish_ = start_ + (vec.end() - vec.begin());
+    end_of_storage_ = finish_;
+  } else if (this->size() > vec.size()) {
+    iterator i = copy(vec.begin(), vec.end(), this->begin());
+    Destory(i, finish_);
+  } else {
+    copy(vec.begin(), vec.begin() + this->size(), this->begin());
+    uninitialized_copy(vec.begin() + this->size(), vec.end(), this->end());
+  }
+  finish_ = start_ + size();
+  }
+  return *this;
+}
+
 
 template <class T, class Alloc>
 void Vector<T, Alloc>::insert_aux(iterator position, const T& x)
@@ -290,7 +358,7 @@ void Vector<T, Alloc>::insert(iterator position, size_type n, const T& x)
       } else {    //空间不够插入n 个元素
         //新增空间大小为原空间大小2倍
         size_type old_size = size();
-        size_type new_size = old_size + max(old_size + n);
+        size_type new_size = old_size + max(old_size, n);
 
         //配置新空间
         iterator new_start = data_allocator::Allocate(new_size);
@@ -326,14 +394,21 @@ template <class T, class Alloc>
 void Vector<T, Alloc>::insert(iterator position, const T &x)
 {
   size_type n = position - begin();
-  if (finish != end_of_storage && position == end()) {
-    construct(finish, x);
-    ++finish;
+  if (finish_ != end_of_storage_ && position == end()) {
+    construct(finish_, x);
+    ++finish_;
   }
   else
     insert_aux(position, x);
 
   return begin() + n;
+}
+
+template <class T, class Alloc>
+inline bool operator==(const Vector<T, Alloc>& x, const Vector<T, Alloc>& y)
+{
+  return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
+
 }
 
 __GSTL_END_NAMESPACE
