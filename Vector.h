@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: gvector.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T17:17:54+08:00
+ * @Last modified time: 2018-03-05T17:50:41+08:00
  */
 
 #ifndef GSTL_VECTOR_H
@@ -53,31 +53,32 @@ public:
   Vector<T, Alloc>& operator=(const Vector<T, Alloc>& vec);
 
 
-  Vector(const Vector<T, Alloc>&& vec) :
+  Vector(Vector<T, Alloc>&& vec) :
     start_(nullptr), finish_(nullptr), end_of_storage_(nullptr) {
-    this->start_ = vec.start_;
-    this->finish = vec.finish;
-    this->end_of_storage_ = vec.end_of_storage_;
+    this->start_ = vec.GetStart();
+    this->finish = vec.GetFinish();
+    this->end_of_storage_ = vec.GetEndOfStorage();
 
-    vec.start_ = nullptr;
-    vec.finish = nullptr;
-    vec.end_of_storage_ = nullptr;
+    vec.GetStart() = nullptr;
+    vec.GetFinish() = nullptr;
+    vec.GetEndOfStorage() = nullptr;
   }
 
 
-  Vector<T, Alloc>& operator=(const Vector<T, Alloc>&& vec) {
+  Vector<T, Alloc>& operator=(Vector<T, Alloc>&& vec) {
     if(&vec != this) {
       Destroy(start_, finish_);
       deallocate();
 
-      this->start_ = vec.start_;
-      this->finish_ = vec.finish_;
-      this->end_of_storage_ = vec.end_of_storage_;
+      this->start_ = vec.GetStart();
+      this->finish_ = vec.GetFinish();
+      this->end_of_storage_ = vec.GetEndOfStorage();
 
-      vec.start_ = nullptr;
-      vec.finish_ = nullptr;
-      vec.end_of_storage_ = nullptr;
+      vec.GetStart() = nullptr;
+      vec.GetFinish() = nullptr;
+      vec.GetEndOfStorage() = nullptr;
     }
+    return *this;
   }
 
   //区间构造函数
@@ -109,7 +110,9 @@ public:
   const_reverse_iterator rcend() { return const_reverse_iterator(begin()); }
 
 
-
+  iterator* GetStart() { return start_; }
+  iterator* GetFinish() { return finish_; }
+  iterator* GetEndOfStorage() { return end_of_storage_; }
   size_type size() const { return static_cast<size_type>(finish_ - start_); }
   //size_type size() const { return size_type(start_ - finish_); }
   size_type max_size() const { return size_type(-1) / sizeof(T); }
@@ -230,7 +233,9 @@ protected:
 
     } catch (...) {
       data_allocator::Deallocate(result, n);
+
     }
+    return nullptr;
 
   }
 
@@ -268,20 +273,20 @@ Vector<T, Alloc>& Vector<T,Alloc>::operator=(const Vector<T, Alloc>& vec)
 {
   if (&vec != this) {
     if (capacity() < vec.size()) {
-    Destroy(start_, finish_);
-    deallocate();
+      Destroy(start_, finish_);
+      deallocate();
 
-    start_ = allocate_and_copy(vec.end() - vec.begin(), vec.begin(), vec.end());
-    //finish_ = start_ + (vec.end() - vec.begin());
-    end_of_storage_ = finish_;
-  } else if (this->size() > vec.size()) {
-    iterator i = copy(vec.begin(), vec.end(), this->begin());
-    Destory(i, finish_);
-  } else {
-    copy(vec.begin(), vec.begin() + this->size(), this->begin());
-    uninitialized_copy(vec.begin() + this->size(), vec.end(), this->end());
-  }
-  finish_ = start_ + size();
+      start_ = allocate_and_copy(vec.end() - vec.begin(), vec.begin(), vec.end());
+      //finish_ = start_ + (vec.end() - vec.begin());
+      end_of_storage_ = finish_;
+    } else if (this->size() > vec.size()) {
+      iterator i = copy(vec.begin(), vec.end(), this->begin());
+      Destory(i, finish_);
+    } else {
+      copy(vec.begin(), vec.begin() + this->size(), this->begin());
+      uninitialized_copy(vec.begin() + this->size(), vec.end(), this->end());
+    }
+    finish_ = start_ + size();
   }
   return *this;
 }
