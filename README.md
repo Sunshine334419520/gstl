@@ -6,11 +6,11 @@ gstl
 
 编译环境：GCC4.0 以上
 
-##开发计划：
+### 开发计划：
   * STL的几大基本组件，如string、vector、list、deque、set、map、unordered_\*等
   * STL算法库的大部分算法
 
-##完成进度：
+### 完成进度：
 * STL的几大基本组件
     * type traits :           100%  
     * allocate :              100%
@@ -23,7 +23,7 @@ gstl
     * deque :                 0%
     * queue :                 0%
     * pair :                  0%
-    * list：                   0%
+    * list：                   80%
 * STL Algorithms:  
     * fill :                  100%
     * fill_n :                100%
