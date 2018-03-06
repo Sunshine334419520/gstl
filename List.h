@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: List.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-05T17:41:50+08:00
+ * @Last modified time: 2018-03-06T19:54:20+08:00
  */
 
 #ifndef GSTL_LIST_H
@@ -48,12 +48,12 @@ public:
   ListIterator(const iterator& x) : node_(x.node_) {}
   ListIterator(link_type x) : node_(x) {}
 
-  link_type* data() { return node_; }
+  link_type data() { return node_; }
 
   bool operator==(const self& x) const { return this->node_ == x.node_; }
   bool operator!=(const self& x) const { return this->node_ != x.node_; }
 
-  reference operator*() const{ return *node_->data; }
+  reference operator*() const{ return node_->data; }
   pointer  operator->() const { return &(operator*()); }
 
   self& operator++() {
@@ -86,6 +86,9 @@ private:
 //List 是一个环状链表
 template <class T, class Alloc = alloc>
 class List {
+public:
+  template <class T2, class Alloc2>
+  friend bool operator==(const List<T2, Alloc2>& x, const List<T2, Alloc2>& y);
 public:
   typedef ListNode<T>           list_node;
   typedef SimpleAlloc<T, Alloc> list_node_alllocate;
@@ -120,10 +123,9 @@ public:
     range_initialize(x.begin(), x.end());
   }
 
+
   List<T, Alloc>& operator=(const List<T, Alloc>& x);
-  List(List<T, Alloc>&& x) {
-    clear();
-    put_node(node_);
+  List(List<T, Alloc>&& x) : node_(nullptr) {
 
     node_ = x.data();
 
@@ -141,6 +143,11 @@ public:
     return *this;
   }
 
+  ~List() {
+    clear();
+    put_node(node_);
+  }
+
 
 public:
   iterator begin() { return node_->next; }
@@ -155,23 +162,25 @@ public:
   const_reverse_iterator rcend() const { return const_reverse_iterator(begin()); }
 
   size_type size() {
-    size_typ result = distance(begin(), x.end());
+    size_type result = distance(begin(), end());
     return result;
   }
   size_type max_size() const { return size_type(-1); }
-  link_type* data() { return node_; }
+  link_type data() { return node_; }
 
   bool empty() { return begin() == end(); }
   reference front() { return *begin(); }
   reference back() { return *(--end()); }
-  const_reference front() const { return *begin(): }
+  const_reference front() const { return *begin(); }
   const_reference back() const { return *(--end()); }
+
+  void swap(List<T, Alloc>& x) { __GSTL::swap(x.node_, this->node_);}
 
   void push_back(const T& x) { insert(end(), x); }
   void push_front(const T& x) { insert(begin(), x); }
 
   void pop_front() { erase(begin()); }
-  void pop_front() { iterator tmp = end(); erase(--tmp); }
+  void pop_back() { iterator tmp = end(); erase(--tmp); }
 
   iterator insert(iterator position, const T& x) {
     link_type tmp = create_node(x);
@@ -185,6 +194,16 @@ public:
   }
 
   iterator insert(iterator position) { return insert(position, T()); }
+  void insert(iterator position, size_type n, const T& x);
+  void insert(iterator position, int n, const T& x) {
+    insert(position, static_cast<size_type>(n), x);
+  }
+  void insert(iterator position, long n, const T& x) {
+    insert(position, static_cast<size_type>(n), x);
+  }
+
+  template <class Inputerator>
+  void insert(iterator position,Inputerator first, Inputerator last);
 
   iterator erase(iterator position) {
     link_type next_node = position.data()->next;
@@ -196,23 +215,25 @@ public:
   }
 
   iterator erase(iterator first, iterator last);
+  void resize(size_type new_size, const T& x);
+  void resize(size_type new_size) { resize(new_size, T()); }
 
   void clear();
 public:
   // 将链表x移动到position之前
-  void splice(iterator position, list& x) {
+  void splice(iterator position, List& x) {
     if (!x.empty())
       transfer(position, x.begin(), x.end());
   }
   // 将链表中i指向的内容移动到position之前
-  void splice(iterator position, list&, iterator i) {
+  void splice(iterator position, List&, iterator i) {
     iterator j = i;
     ++j;
     if(position == i || position == j) return ;
     transfer(position, i, j);
   }
  // 将[first, last}元素移动到position之前
-  void splice(position, list&, iterator first, iterator last) {
+  void splice(iterator position, List&, iterator first, iterator last) {
     if (first != last)
       transfer(position, first, last);
   }
@@ -230,19 +251,19 @@ public:
 
 protected:
   //构造一个新节点，不进行构造
-  link_type get_node() const { return list_node_alllocate::Allocate(); }
+  link_type get_node() { return reinterpret_cast<link_type>(list_node_alllocate::Allocate(sizeof(link_type))); }
   //释放一个节点, 并不调用析构
   void put_node(link_type p) { list_node_alllocate::Deallocate(p); }
   //创建一个节点
   link_type create_node(const T& x) {
     link_type p = get_node();
     try {
-      Construct(&(p->data), x);
+      Construct(&p->data, x);
     } catch (...) {
       put_node(p);
     }
 
-    return tmp;
+    return p;
   }
   // 释放一个节点
   void destroy_node(link_type p) {
@@ -254,7 +275,7 @@ protected:
   void empty_initialize() {
     node_ = get_node();
     node_->next = node_;
-    node->prev = node_;
+    node_->prev = node_;
   }
   //构造一个n个链表初始值为x的链表
   void fill_initialize(size_type n, const T& x) {
@@ -268,7 +289,7 @@ protected:
   }
   //构造一个区域链表
   template <class InputIterator>
-  void range_initialize(InpuIterator first, InputIterator last) {
+  void range_initialize(InputIterator first, InputIterator last) {
     empty_initialize();
     try {
       insert(this->begin(), first, last);
@@ -284,7 +305,7 @@ protected:
       first.data()->prev->next = last.data();
       position.data()->prev->next = first.data();
 
-      tmp = first.data()->prev;
+      link_type tmp = first.data()->prev;
       first.data()->prev = position.data()->prev;
       position.data()->prev = last.data()->prev;
       last.data()->prev = tmp;
@@ -295,6 +316,28 @@ protected:
 
 };
 
+template <class T2, class Alloc2>
+inline bool operator==(const List<T2, Alloc2>& x, const List<T2, Alloc2>& y)
+{
+  typedef typename List<T2, Alloc2>::link_type link_type;
+  link_type e1 = x.node_;
+  link_type e2 = y.node_;
+  link_type n1 = e1->next;
+  link_type n2 = e2->next;
+
+  for ( ; e1 != n1 && e2 != n2; n1->next, n2->next)
+    if (n1->data != n2->data)
+      return false;
+
+  return n1 == e1 && n2 == e2;
+}
+
+template <class T, class Alloc>
+bool operator<(const List<T, Alloc>& x, const List<T, Alloc>& y)
+{
+  return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+}
+
 
 template <class T, class Alloc>
 List<T, Alloc>& List<T, Alloc>::operator=(const List<T, Alloc> &x)
@@ -302,7 +345,7 @@ List<T, Alloc>& List<T, Alloc>::operator=(const List<T, Alloc> &x)
   if (this != &x) {
     iterator first1 = this->begin();
     iterator last1 = this->end();
-    iteartor first2 = x.begin();
+    iterator first2 = x.begin();
     iterator last2 = x.end();
 
     //把first2的值复制给first1
@@ -317,17 +360,61 @@ List<T, Alloc>& List<T, Alloc>::operator=(const List<T, Alloc> &x)
 }
 
 template <class T, class Alloc>
+inline void swap(List<T, Alloc>& x, List<T, Alloc>& y)
+{
+  x.swap(y);
+}
+
+template <class T, class Alloc>
 void List<T, Alloc>::clear()
 {
   link_type cur = node_->next;
-  while (cur != end()) {
+  while (cur != node_) {
     link_type tmp = cur;
     cur = cur->next;
-    destroy_node(cur);
+    destroy_node(tmp);
   }
 
   node_->next = node_;
   node_->prev = node_;
+}
+
+template <class T, class Alloc>
+template <class InputIterator>
+void List<T, Alloc>::insert(iterator position,
+                            InputIterator first, InputIterator last)
+{
+  while (first != last) {
+    insert(position, *first);
+    ++first;
+  }
+}
+
+template <class T, class Alloc>
+void List<T, Alloc>::insert(iterator position, size_type n, const T& x)
+{
+  for ( ; n > 0; n--)
+    insert(position, x);
+}
+
+template <class T, class Alloc>
+typename List<T, Alloc>::iterator List<T, Alloc>::erase(iterator first, iterator last)
+{
+  while (first != last) erase(first++);
+  return last;
+}
+
+template <class T, class Alloc>
+void List<T, Alloc>::resize(size_type new_size, const T& x)
+{
+  size_type len = 0;
+  iterator i = begin();
+  for ( ; i != end() && len < new_size; len++, ++i)
+    ;
+  if (len == new_size)
+    erase(i, end());
+  else
+    insert(end(), new_size - len, x);
 }
 
 template <class T, class Alloc>
@@ -371,12 +458,12 @@ void List<T, Alloc>::merge(List<T, Alloc> &x)
   iterator last2 = x.end();
 
   while (first1 != last1 && first2 != last2)
-    if (*first2 < *firsst1) {
+    if (*first2 < *first1) {
       iterator next = first2;
       transfer(first1, first2, ++next);
       first2 = next;
     } else {
-      ++first;
+      ++first1;
     }
     if (first2 != last2) transfer(last1, first2, last2);
 }
@@ -385,7 +472,7 @@ template <class T, class Alloc>
 void List<T, Alloc>::reverse()
 {
   //空链表或者仅有一个元素，直接返回
-  if (node->next == node || node->next->next == node)
+  if (node_->next == node_ || node_->next->next == node_)
     return ;
   iterator first = begin();
   ++first;
@@ -395,6 +482,30 @@ void List<T, Alloc>::reverse()
     transfer(begin(), old_first, first);
   }
 }
+
+
+// 按照升序排序
+template <class T, class Alloc>
+void List<T, Alloc>::sort()
+{
+   if (node_->next == node_ || link_type(node_->next)->next == node_) return;
+   List<T, Alloc> carry;
+   List<T, Alloc> counter[64];
+   int fill = 0;
+   while (!empty()) {
+     carry.splice(carry.begin(), *this, begin());
+     int i = 0;
+     while(i < fill && !counter[i].empty()) {
+       counter[i].merge(carry);
+       carry.swap(counter[i++]);
+     }
+     carry.swap(counter[i]);
+     if (i == fill) ++fill;
+   }
+
+   for (int i = 1; i < fill; ++i) counter[i].merge(counter[i-1]);
+   swap(counter[fill-1]);
+ }
 
 __GSTL_END_NAMESPACE
 
