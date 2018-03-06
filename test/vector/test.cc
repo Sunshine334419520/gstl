@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: test.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T14:43:46+08:00
+ * @Last modified time: 2018-03-04T15:56:29+08:00
  */
 #include "Vector.h"
 #include <iostream>
@@ -80,9 +80,17 @@ int main(int argc, char const *argv[]) {
 
   cout << endl;
 
+  gstl::Vector<int> iv2(iv.begin(), iv.end());
+
   iv.clear();
   cout << "size = " << iv.size() << endl;
   cout << "capacity = " << iv.capacity() << endl;
+
+  for (auto iv2it = iv2.rcbegin(); iv2it != iv2.rcend(); ++iv2it)
+  {
+    cout << *iv2it << '\t';
+  }
+
 
 
   return 0;
