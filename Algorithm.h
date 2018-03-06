@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T14:35:06+08:00
+ * @Last modified time: 2018-03-06T17:06:02+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -100,6 +100,21 @@ inline void swap(T& a, T& b)
   T tmp = a;
   a = b;
   b = tmp;
+}
+
+
+//用字典排列方式对两个序列进行比较，小于放回true， 大于false
+template <class Inputerator1, class Inputerator2>
+bool lexicographical_compare(Inputerator1 first1, Inputerator1 last1,
+                             Inputerator2 first2, Inputerator2 last2)
+{
+  for ( ; first1 != last1 && first2 != last2; ++first1, ++first2)
+    if (*first1 < *first2)
+      return true;
+    if (*first2 < *first1)
+      return false;
+
+  return first1 ==last1 && first2 != last2;
 }
 
 /* copy 大家族 */
