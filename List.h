@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: List.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-06T19:54:20+08:00
+ * @Last modified time: 2018-03-07T16:28:37+08:00
  */
 
 #ifndef GSTL_LIST_H
@@ -89,9 +89,9 @@ class List {
 public:
   template <class T2, class Alloc2>
   friend bool operator==(const List<T2, Alloc2>& x, const List<T2, Alloc2>& y);
-public:
+protected:
   typedef ListNode<T>           list_node;
-  typedef SimpleAlloc<T, Alloc> list_node_alllocate;
+  typedef SimpleAlloc<list_node, Alloc> list_node_alllocate;
 
 public:
   typedef T                     value;
