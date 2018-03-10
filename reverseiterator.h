@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: reverseiterator.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T17:14:43+08:00
+ * @Last modified time: 2018-03-10T21:35:06+08:00
  */
 
 #ifndef GSTL_REVERSE_ITERATOR_H
@@ -32,10 +32,10 @@ public:
   reverse_iterator() : current_(nullptr) {}
   explicit reverse_iterator(iterator_type x) : current_(x) {}
 
-  reverse_iterator(const self& x) : current_(x.current_) {}
+  reverse_iterator(const self& x) : current_(x.base()) {}
   template <class Iter>
   reverse_iterator(const reverse_iterator<Iter>& x) :
-  current_(x.current_) {}
+  current_(x.base()) {}
 
 public:
   iterator_type base() const { return current_; }
