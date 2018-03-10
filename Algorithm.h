@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-06T17:06:02+08:00
+ * @Last modified time: 2018-03-10T21:25:45+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -117,6 +117,7 @@ bool lexicographical_compare(Inputerator1 first1, Inputerator1 last1,
   return first1 ==last1 && first2 != last2;
 }
 
+
 /* copy 大家族 */
 template <class InputIterator, class OutputIterator>
 inline OutputIterator
@@ -137,6 +138,7 @@ __copy_d(RandomAccessIterator first, RandomAccessIterator last,
   //对n进行循环，效率高
   for (Distance n = last - first; n > 0; n--, ++result, ++first)
     *result = *first;
+  return result;
 }
 
 template <class RandomAccessIterator, class OutputIterator>
@@ -217,7 +219,7 @@ inline BidirectionalIterator2
 __copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last,
                 BidirectionalIterator2 result)
 {
-  while (first != last) *(--result) = *(--last);
+  while (first != last) *--result = *--last;
   return result;
 }
 
