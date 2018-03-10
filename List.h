@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: List.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-07T16:28:37+08:00
+ * @Last modified time: 2018-03-10T19:53:16+08:00
  */
 
 #ifndef GSTL_LIST_H
@@ -115,6 +115,7 @@ public:
   List(size_type n, const T& x) { fill_initialize(n, x); }
   List(int n, const T& x) { fill_initialize(n, x); }
   List(long n, const T& x) { fill_initialize(n, x); };
+  explicit List(size_type n) { fill_initialize(n, T()); }
 
   template <class InputIterator>
   List(InputIterator first, InputIterator last) { range_initialize(first, last);}
@@ -251,7 +252,7 @@ public:
 
 protected:
   //构造一个新节点，不进行构造
-  link_type get_node() { return reinterpret_cast<link_type>(list_node_alllocate::Allocate(sizeof(link_type))); }
+  link_type get_node() { list_node_alllocate::Allocate(); }
   //释放一个节点, 并不调用析构
   void put_node(link_type p) { list_node_alllocate::Deallocate(p); }
   //创建一个节点
