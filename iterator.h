@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: iterator.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T12:35:19+08:00
+ * @Last modified time: 2018-03-10T17:27:36+08:00
  */
 
 #ifndef GSTL_ITERATOR_H
@@ -146,11 +146,20 @@ __distance(RandomAccessIterator first, RandomAccessIterator last,
   return last - first;
 }
 
+
+//计算距离函数
 template <class InputIterator>
 inline typename iterator_traits<InputIterator>::difference_type
 distance(InputIterator first, InputIterator last)
 {
   return __distance(first, last, iterator_category(first));
+}
+
+template <class InputIterator>
+inline void
+distance(InputIterator first, InputIterator last, size_t n)
+{
+   n = static_cast<size_t>(__distance(first, last, iterator_category(first)));
 }
 
 template <class InputIterator, class Distance>
@@ -175,6 +184,7 @@ __advance(BidirectionalIterator& first, Distance n,
       --first;
 }
 
+
 template <class RandomAccessIterator, class Distance>
 inline void
 __advance(RandomAccessIterator& first, Distance n,
@@ -183,12 +193,15 @@ __advance(RandomAccessIterator& first, Distance n,
   first += n;
 }
 
+//移动n个距离
 template <class InputIterator, class Distance>
 inline void
 advance(InputIterator& first, Distance n)
 {
   __advance(first, n, iterator_category(first));
 }
+
+
 
 __GSTL_END_NAMESPACE
 
