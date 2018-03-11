@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_config.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-27T16:12:42+08:00
+ * @Last modified time: 2018-03-06T16:41:19+08:00
  */
 #ifndef GSTL_CONFIG_H
 #define GSTL_CONFIG_H
@@ -15,11 +15,9 @@
 
 
 
- # ifdef __STL_EXPLICIT_FUNCTION_TMPL_ARGS
- #   define __STL_NULL_TMPL_ARGS <>
- # else
- #   define __STL_NULL_TMPL_ARGS
- # endif
+
+ #define __GSTL_NULL_TMPL_ARGS <>
+
 
  #define __STL_TEMPLATE_NULL template<>
 
