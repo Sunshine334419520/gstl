@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: test.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T18:20:19+08:00
+ * @Last modified time: 2018-03-11T12:02:00+08:00
  */
 
 #include "List.h"
@@ -79,6 +79,9 @@ int main(int argc, char const *argv[]) {
   for (auto i : ilist3)
     cout << i << '\t';
   cout << endl;
+
+  if (ilist >= ilist3) cout << "true" << endl;
+  else cout << "false";
 
   return 0;
 }
