@@ -18,12 +18,13 @@ gstl
     * reverse_iterator :      100%
     * vector :                100%
     * string :                0%
-    * priority_queue :        0%
-    * stack :                 0%
-    * deque :                 0%
-    * queue :                 0%
+    * PriorityQueue :        100%
+    * stack :                 100%
+    * deque :                 100%
+    * queue :                 100%
     * pair :                  0%
-    * list：                   80%
+    * list：                   100%
+    * slist:                  100%
 * STL Algorithms:  
     * fill :                  100%
     * fill_n :                100%
@@ -32,7 +33,7 @@ gstl
     * swap :                  100%
     * min、max :               50%
     * equal :                 100%
-    * make_heap :             0%
+    * make_heap :             100%
     * pop_heap :              100%
     * push_heap :             100%
     * sort_heap :             100%
@@ -71,14 +72,15 @@ gstl
   * string：                       0%
   * pair：                         0%
   * algorithm：                    10%
-  * priority_queue：               0%
+  * priority_queue：               100%
   * suffix_array：                 0%
-  * queue：                        0%
-  * stack：                        0%
+  * queue：                        100%
+  * stack：                        100%
   * bitmap：                       0%
   * circular_buffer：              0%
-  * deque：                        0%
-  * list：                         0%
+  * deque：                        100%
+  * list：                         100%
+  * slist:                          0%
   * binary_search_tree：           0%
   * avl_tree：                     0%
   * unordered_set：                0%
