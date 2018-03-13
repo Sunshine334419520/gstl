@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Slist.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-12T17:49:19+08:00
+ * @Last modified time: 2018-03-13T15:01:31+08:00
  */
 
 #ifndef GSTL_SLIST_H
@@ -17,11 +17,11 @@
 //#include "reverseiterator.h"
  #ifndef GSTL_RLPOS_H
   #include "relops.h"
-#endif 
+#endif
 __GSTL_BEGIN_NAMESPACE
 
 struct SlistNodeBase {
-  ListNodeBast* next;
+  SlistNodeBase* next;
 };
 
 template <class T>
@@ -101,10 +101,10 @@ struct SlistIterator : public SlistIteratorBase {
     typedef SlistIterator<T, Ref, Ptr>  self;
 
     SlistIterator(list_node* x) : SlistIteratorBase(x) {}
-    SlistIterator() : (nullptr) {}
+    SlistIterator() : SlistIteratorBase(nullptr) {}
     SlistIterator(const SlistIterator& x) : SlistIteratorBase(x.node) {}
 
-    reference operator*() const { return static_cast<link_type*>(node)->data; }
+    reference operator*() const { return static_cast<list_node*>(node)->data; }
     pointer operator->() const { return &(operator*()); }
 
     self& operator++() {
@@ -119,15 +119,22 @@ struct SlistIterator : public SlistIteratorBase {
     }
 };
 
+template <class T, class Alloc>
+class Slist;
+
+template <class T, class Alloc>
+bool operator==(const Slist<T, Alloc>&, const Slist<T, Alloc>&);
+
 
 template <class T, class Alloc = alloc>
 class Slist {
+  friend bool operator== <> (const Slist& x, const Slist& y);
 public:
-  typedef T                     value;
-  typedef value&                reference;
-  typedef value*                pointer;
-  typedef const value&          const_reference;
-  typedef const value*          const_pointer;
+  typedef T                     value_type;
+  typedef value_type&           reference;
+  typedef value_type*           pointer;
+  typedef const value_type&     const_reference;
+  typedef const value_type*     const_pointer;
   typedef size_t                size_type;
   typedef ptrdiff_t             difference_type;
 
@@ -192,7 +199,7 @@ public:
 
   void pop_front()
   {
-    link_node* node = static_cast<link_node*>(head.next);
+    list_node* node = static_cast<list_node*>(head.next);
     head.next = node->next;
     destroy_node(node);
   }
@@ -251,12 +258,12 @@ public:
   {
     _insert_after_fill(SlistPrevious(&head, pos.node), n, x);
   }
-  void insert(iterator pos, size_type n, const T& x)
+  void insert(iterator pos, int n, const T& x)
   {
     _insert_after_fill(SlistPrevious(&head, pos.node),
                        static_cast<size_type>(n), x);
   }
-  void insert(iterator pos, size_type n, const T& x)
+  void insert(iterator pos, long n, const T& x)
   {
     _insert_after_fill(SlistPrevious(&head, pos.node),
                        static_cast<size_type>(n), x);
@@ -286,10 +293,10 @@ public:
   iterator erase(iterator first, iterator last)
   {
     return iterator(static_cast<list_node*>(
-                  _erase_after(SlistPrevious(&head, pos.node), last.node)));
+                  _erase_after(SlistPrevious(&head, first.node), last.node)));
   }
 
-  void clear() { erase(&head, nullptr); }
+  void clear() { _erase_after(&head, nullptr); }
 
 private:
   //在指定节点后插入一个节点
@@ -329,7 +336,7 @@ private:
       destroy_node(tmp);
     }
     before_first->next = last_node;
-    return last_ndoe;
+    return last_node;
   }
 
 
@@ -346,9 +353,9 @@ private:
     }
     return node;
   }
-  static void destroy_node(link_type* node)
+  static void destroy_node(list_node* node)
   {
-    Destroy(node->data);
+    Destroy(&node->data);
     list_node_alllocate::Deallocate(node);
   }
 
@@ -395,7 +402,7 @@ Slist<T, Alloc>& Slist<T,Alloc>::operator=(const Slist<T, Alloc> &x)
       n2 = static_cast<list_node*>(n2->next);
     }
     if (n1 == nullptr)
-      _insert_after_range(p1, const_iterator(static<link_node*>(n2)),
+      _insert_after_range(p1, const_iterator(static_cast<list_node*>(n2)),
                           const_iterator(nullptr));
     else
       erase(p1, nullptr);
@@ -407,8 +414,9 @@ Slist<T, Alloc>& Slist<T,Alloc>::operator=(const Slist<T, Alloc> &x)
 template <class T, class Alloc>
 bool operator==(const Slist<T, Alloc>& x, const Slist<T, Alloc>& y)
 {
-  list_node* n1 = x.head.next;
-  list_node* n2 = y.head.next;
+  typedef typename Slist<T, Alloc>::list_node list_node;
+  list_node* n1 = static_cast<list_node*>(x.head.next);
+  list_node* n2 = static_cast<list_node*>(y.head.next);
 
   while (n1 && n2) {
     if (n1->data != n2->data)
