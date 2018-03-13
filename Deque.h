@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Deque.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T21:48:42+08:00
+ * @Last modified time: 2018-03-11T13:09:04+08:00
  */
 
 #ifndef GSTL_DEQUE_H
@@ -15,6 +15,9 @@
 #include "iterator.h"
 #include "Algorithm.h"
 #include "reverseiterator.h"
+#ifndef GSTL_RLPOS_H
+  #include "relops.h"
+#endif
 
 __GSTL_BEGIN_NAMESPACE
 
@@ -292,11 +295,11 @@ public:
   }
 
   void pop_back() {
-    if (finish_.current_ != finish_.first)
+    if (finish_.current_ != finish_.first_)
     {
       //最后缓冲区还有元素
       --finish_.current_;
-      destroy(finish_.current_);
+      Destroy(finish_.current_);
     } else
       //最后的缓冲区没有任何位置，需要做释放工作
       pop_back_aux();
@@ -304,9 +307,9 @@ public:
 
   void pop_front()
   {
-    if (start_.current_ != start_.last - 1) {
-      destroy(start_.current_);
-      --start_.current_;
+    if (start_.current_ != start_.last_ - 1) {
+      Destroy(start_.current_);
+      ++start_.current_;
     } else
       //第一个缓冲区还有一个元素
       pop_front_aux();
