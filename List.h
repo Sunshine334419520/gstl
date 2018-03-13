@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: List.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T19:53:16+08:00
+ * @Last modified time: 2018-03-13T14:35:59+08:00
  */
 
 #ifndef GSTL_LIST_H
@@ -16,6 +16,11 @@
 #include "iterator.h"
 #include "Traits.h"
 #include "reverseiterator.h"
+
+#ifndef GSTL_RLPOS_H
+    #include "relops.h"
+
+#endif
 
 __GSTL_BEGIN_NAMESPACE
 
@@ -94,11 +99,11 @@ protected:
   typedef SimpleAlloc<list_node, Alloc> list_node_alllocate;
 
 public:
-  typedef T                     value;
-  typedef value&                reference;
-  typedef value*                pointer;
-  typedef const value&          const_reference;
-  typedef const value*          const_pointer;
+  typedef T                     value_type;
+  typedef value_type&                reference;
+  typedef value_type*                pointer;
+  typedef const value_type&          const_reference;
+  typedef const value_type*          const_pointer;
   typedef size_t                size_type;
   typedef ptrdiff_t             difference_type;
   typedef list_node*            link_type;
@@ -252,7 +257,7 @@ public:
 
 protected:
   //构造一个新节点，不进行构造
-  link_type get_node() { list_node_alllocate::Allocate(); }
+  link_type get_node() { return list_node_alllocate::Allocate(); }
   //释放一个节点, 并不调用析构
   void put_node(link_type p) { list_node_alllocate::Deallocate(p); }
   //创建一个节点
