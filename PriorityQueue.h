@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: PriorityQueue.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-12T11:35:19+08:00
+ * @Last modified time: 2018-03-15T14:33:45+08:00
  */
 
 #ifndef GSTL_PRIORITYQUEUE_H
@@ -48,6 +48,7 @@ public:
     }
     catch (...) {
       containne_.clear();
+      throw;
     }
   }
   void pop() {
@@ -57,6 +58,7 @@ public:
     }
     catch (...) {
       containne_.clear();
+      throw;
     }
   }
 

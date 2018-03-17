@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: gvector.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-05T17:50:41+08:00
+ * @Last modified time: 2018-03-15T14:33:51+08:00
  */
 
 #ifndef GSTL_VECTOR_H
@@ -220,6 +220,7 @@ protected:
 
     } catch(...) {
       data_allocator::Deallocate(result, n);
+      throw;
     }
     return nullptr;
 
@@ -233,6 +234,7 @@ protected:
 
     } catch (...) {
       data_allocator::Deallocate(result, n);
+      throw;
 
     }
     return nullptr;

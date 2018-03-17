@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Slist.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-13T15:01:31+08:00
+ * @Last modified time: 2018-03-15T14:30:23+08:00
  */
 
 #ifndef GSTL_SLIST_H
@@ -350,6 +350,7 @@ private:
     }
     catch (...) {
       list_node_alllocate::Deallocate(node);
+      throw;
     }
     return node;
   }
@@ -367,6 +368,7 @@ private:
     }
     catch (...) {
       clear();
+      throw;
     }
   }
 
@@ -379,6 +381,7 @@ private:
     }
     catch (...) {
       clear();
+      throw;
     }
   }
 
