@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Deque.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-11T13:09:04+08:00
+ * @Last modified time: 2018-03-15T14:33:33+08:00
  */
 
 #ifndef GSTL_DEQUE_H
@@ -215,6 +215,7 @@ public:
       uninitialized_copy(x.begin(), x.end(), this->begin());
     } catch(...) {
       destroy_map_and_nodes();
+      throw;
     }
   }
   Deque(size_type n, const T& x)
@@ -600,6 +601,7 @@ void Deque<T, Alloc, BufSize>::range_initialize(ForwardIterator first,
   }
   catch(...) {
     destroy_map_and_nodes();
+    throw;
   }
 }
 
@@ -820,6 +822,7 @@ void Deque<T, Alloc, BufSize>::insert_aux(iterator pos, size_type n,
    }
    catch (...) {
      destroy_nodes_at_front(new_start);
+     throw;
    }
  }
  else {
@@ -845,6 +848,7 @@ void Deque<T, Alloc, BufSize>::insert_aux(iterator pos, size_type n,
    }
    catch (...) {
      destroy_nodes_at_back(new_finish);
+     throw;
    }
  }
 }
@@ -880,6 +884,7 @@ void Deque<T, Alloc, BufSize>::insert_aux(iterator pos,
     }
     catch (...) {
       destroy_nodes_at_front(new_start);
+      throw;
     }
   }
   else {
@@ -905,6 +910,7 @@ void Deque<T, Alloc, BufSize>::insert_aux(iterator pos,
     }
     catch (...) {
       destroy_nodes_at_back(new_finish);
+      throw;
     }
   }
 
@@ -1021,6 +1027,7 @@ void Deque<T, Alloc, BufSize>::insert(iterator position,
     }
     catch (...) {
       destroy_nodes_at_front(new_start);
+      throw;
     }
 
   }
@@ -1032,6 +1039,7 @@ void Deque<T, Alloc, BufSize>::insert(iterator position,
     }
     catch (...) {
       destroy_nodes_at_back(new_finish);
+      throw
     }
   }
   else {
