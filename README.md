@@ -22,9 +22,17 @@ gstl
     * stack :                 100%
     * deque :                 100%
     * queue :                 100%
-    * pair :                  0%
+    * pair :                  100%
     * list：                   100%
     * slist:                  100%
+    * rb_tree:                100%
+    * set:                    0%
+    * multimset:              0%
+    * map:                    0%
+    * multimmap:              0%
+    * hashtable:              0%
+    * hashset :               0%
+    * hashmap :               0%
 * STL Algorithms:  
     * fill :                  100%
     * fill_n :                100%
@@ -70,7 +78,7 @@ gstl
 
   * vector：                       100%
   * string：                       0%
-  * pair：                         0%
+  * pair：                         100%
   * algorithm：                    10%
   * priority_queue：               100%
   * suffix_array：                 0%
@@ -80,8 +88,15 @@ gstl
   * circular_buffer：              0%
   * deque：                        100%
   * list：                         100%
-  * slist:                          0%
-  * binary_search_tree：           0%
+  * slist:                          100%
+  * rb_tree:                100%
+  * set:                    0%
+  * multimset:              0%
+  * map:                    0%
+  * multimmap:              0%
+  * hashtable:              0%
+  * hashset :               0%
+  * hashmap :               0%
   * avl_tree：                     0%
   * unordered_set：                0%
   * directed_graph：               0%
