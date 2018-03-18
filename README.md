@@ -26,9 +26,9 @@ gstl
     * list：                   100%
     * slist:                  100%
     * rb_tree:                100%
-    * set:                    0%
+    * set:                    100%
     * multimset:              0%
-    * map:                    0%
+    * map:                    100%
     * multimmap:              0%
     * hashtable:              0%
     * hashset :               0%
@@ -90,9 +90,9 @@ gstl
   * list：                         100%
   * slist:                          100%
   * rb_tree:                100%
-  * set:                    0%
+  * set:                    100%
   * multimset:              0%
-  * map:                    0%
+  * map:                    100%
   * multimmap:              0%
   * hashtable:              0%
   * hashset :               0%
