@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: RB_tree.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-17T16:28:33+08:00
+ * @Last modified time: 2018-03-18T16:36:48+08:00
  */
 
 #ifndef GSTL_RB_TREE_H
@@ -244,10 +244,10 @@ public:
   const_iterator end() const { return header_; }
   const_iterator cbegin() const { return leftmost(); }
   const_iterator cend() const { return header_; }
-  reverse_iterator rbegin() { return end(); }
-  reverse_iterator rend() { return begin(); }
-  const_reverse_iterator rcbegin() const { return end(); }
-  const_reverse_iterator rcend() const { return begin(); }
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
+  const_reverse_iterator rcbegin() const { return const_reverse_iterator(end()); }
+  const_reverse_iterator rcend() const { return const_reverse_iterator(begin()); }
 
   bool empty() const { return node_count_ == 0; }
   size_type size() const { return node_count_; }
@@ -482,7 +482,7 @@ typename RB_tree<Key, Value, KeyOfValue, Compare, Alloc>::size_type
 RB_tree<Key, Value, KeyOfValue, Compare, Alloc>::count(const Key& k) const {
   Pair<const_iterator, const_iterator> p = equal_range(k);
   size_type n = 0;
-  distance(p.first, p.second, n);
+  distance(p.first, p.sencond, n);
   return n;
 }
 
@@ -702,8 +702,8 @@ typename RB_tree<Key, Value, KeyOfValue, Compare, Alloc>::size_type
 RB_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(const Key& x) {
   Pair<iterator,iterator> p = equal_range(x);
   size_type n = 0;
-  distance(p.first, p.second, n);
-  erase(p.first, p.second);
+  distance(p.first, p.sencond, n);
+  erase(p.first, p.sencond);
   return n;
 }
 
