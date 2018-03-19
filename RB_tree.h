@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: RB_tree.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-18T16:36:48+08:00
+ * @Last modified time: 2018-03-19T14:05:34+08:00
  */
 
 #ifndef GSTL_RB_TREE_H
@@ -656,7 +656,7 @@ RB_tree<Key, Value, KeyOfValue, Compare, Alloc>::insert_equal(iterator position,
     iterator before = position;
     --before;
     if (!key_compare_(KeyOfValue()(v), key(before.node))
-        && !key_compare(key(position.node), KeyOfValue()(v)))
+        && !key_compare_(key(position.node), KeyOfValue()(v)))
       if (right(before.node) == 0)
         return _insert(0, before.node, v);
       else
