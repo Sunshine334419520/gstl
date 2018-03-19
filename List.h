@@ -267,6 +267,7 @@ protected:
       Construct(&p->data, x);
     } catch (...) {
       put_node(p);
+      throw;
     }
 
     return p;
@@ -291,6 +292,7 @@ protected:
     } catch(...) {
       clear();
       put_node(node_);
+      throw;
     }
   }
   //构造一个区域链表
@@ -302,6 +304,7 @@ protected:
     } catch(...) {
       clear();
       put_node(node_);
+      throw;
     }
   }
 protected:
