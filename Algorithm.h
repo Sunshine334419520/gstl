@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T21:25:45+08:00
+ * @Last modified time: 2018-03-19T11:59:22+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -108,11 +108,13 @@ template <class Inputerator1, class Inputerator2>
 bool lexicographical_compare(Inputerator1 first1, Inputerator1 last1,
                              Inputerator2 first2, Inputerator2 last2)
 {
-  for ( ; first1 != last1 && first2 != last2; ++first1, ++first2)
+  for ( ; first1 != last1 && first2 != last2; ++first1, ++first2) {
     if (*first1 < *first2)
       return true;
     if (*first2 < *first1)
       return false;
+  }
+
 
   return first1 ==last1 && first2 != last2;
 }
@@ -280,6 +282,9 @@ copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last,
                            BidirectionalIterator2>()(first, last, result);
 
 }
+
+
+
 
 __GSTL_END_NAMESPACE
 
