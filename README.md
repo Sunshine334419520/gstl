@@ -27,10 +27,10 @@ gstl
     * slist:                  100%
     * rb_tree:                100%
     * set:                    100%
-    * multimset:              0%
+    * multimset:              100%
     * map:                    100%
-    * multimmap:              0%
-    * hashtable:              0%
+    * multimmap:              100%
+    * hashtable:              100%
     * hashset :               0%
     * hashmap :               0%
 * STL Algorithms:  
@@ -58,6 +58,8 @@ gstl
 	  * search :                0%
 	  * advance :               100%
     * distance :              100%
+    * lower_bound             100%
+    * upper_bound             0%
 	  * sort :                  0%
 	  * generate :              0%
 	  * generate_n :            0%
@@ -65,6 +67,7 @@ gstl
 
 
 * 其他组件：
+    * hash_fun                    100%
     * circular_buffer :           0%   
     * bitmap :                    0%
     * binary_search_tree :        0%
@@ -91,10 +94,10 @@ gstl
   * slist:                          100%
   * rb_tree:                100%
   * set:                    100%
-  * multimset:              0%
+  * multimset:              100%
   * map:                    100%
-  * multimmap:              0%
-  * hashtable:              0%
+  * multimmap:              100%
+  * hashtable:              100%
   * hashset :               0%
   * hashmap :               0%
   * avl_tree：                     0%
