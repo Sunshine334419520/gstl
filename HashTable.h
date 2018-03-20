@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: HashTable.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T17:27:51+08:00
+ * @Last modified time: 2018-03-20T17:53:03+08:00
  */
 
 #ifndef GSTL_HASH_TABLE_H
@@ -16,6 +16,7 @@
 #include "construct.h"
 #include "iterator.h"
 #include "Pair.h"
+#include "Algorithm.h"
 #include "Vector.h"
 
 
@@ -32,6 +33,13 @@ struct HashTableIterator;
 template <class Value, class Key, class HashFun,
           class ExtractKey, class EqualKey, class Alloc = alloc>
 struct HashTableConstIterator;
+
+template <class Value, class Key, class HashFun,
+          class ExtractKey, class EqualKey, class Alloc>
+bool operator==(const HashTable<Value, Key, HashFun,
+                ExtractKey, EqualKey, Alloc>& x,
+                const HashTable<Value, Key, HashFun,
+                ExtractKey, EqualKey, Alloc>& y);
 
 //hashtable 节点
 template <class Value>
@@ -64,8 +72,8 @@ struct HashTableIterator {
   hashtable*   ht;        //保持对容器对连接关系
 
   //  构造函数
-  HashTableIterator() {}
-  HashTableIterator(hash_node* n, hashtable* tab) : cur(n), ht(n) { }
+  HashTableIterator() : cur(nullptr), ht(nullptr) {}
+  HashTableIterator(hash_node* n, hashtable* tab) : cur(n), ht(tab) { }
 
   //操作符重载
   reference operator*() const { return cur->val; }
@@ -106,7 +114,7 @@ struct HashTableConstIterator {
   HashTableConstIterator(const hash_node* n, const hashtable* tab)
    : cur(n), ht(n) {}
   HashTableConstIterator(const iterator& it)
-   : cur(it.cur), ht(ht.ht) {}
+   : cur(it.cur), ht(it.ht) {}
 
   //操作符重载
   reference operator*() const { return cur->val; }
@@ -147,6 +155,7 @@ class HashTable {
   HashTableIterator<Value, Key, HashFun, ExtractKey, EqualKey, Alloc>;
   friend struct
   HashTableConstIterator<Value, Key, HashFun, ExtractKey, EqualKey, Alloc>;
+  friend bool operator== <> (const HashTable&, const HashTable&);
 public:
   typedef Value value_type;
   typedef Key   key_type;
@@ -166,14 +175,41 @@ public:
                             ExtractKey, EqualKey, Alloc>    const_iterator;
 private:
   typedef HashTableNode<Value> hash_node;
-  typedef SimpleAlloc<hash_node*, alloc>  hash_node_allcoate;
+  typedef SimpleAlloc<hash_node, alloc>  hash_node_allcoate;
 public:
   HashTable(size_type n, const HashFun& hf,
             const EqualKey& eql)
-    : hash_(hf), equals_(eql)
+    : hash_(hf), equals_(eql), num_elements_(0)
   {
     initialize_buckets(n);
   }
+
+  HashTable(size_type n, const HashFun& hf,
+            const EqualKey& eql, const ExtractKey& ext)
+    : hash_(hf), equals_(eql), get_key(ext), num_elements_(0)
+  {
+    initialize_buckets(n);
+  }
+
+  HashTable(const HashTable& ht)
+    : hash_(ht.hash_), equals_(ht.equals_), get_key(ht.get_key),num_elements_(0)
+  {
+    copy_from(ht);
+  }
+
+  HashTable& operator=(const HashTable& ht)
+  {
+    if (&ht != this) {
+      clear();
+      hash_ = ht.hash;
+      equals_ = ht.equals_;
+      get_key = ht.get_key;
+      copy_from(ht);
+    }
+    return *this;
+  }
+
+  ~HashTable() { clear(); }
 public:
   bool empty() const { return num_elements_ == 0; }
   size_type size() const { return num_elements_; }
@@ -222,13 +258,91 @@ public:
 public:
   size_type bucket_count() const { return buckets_.size(); }
   size_type max_bucket_count() const { return prime_list[num_primes - 1]; }
+  //计算key映射了多少value
+  size_type elems_in_bucket(size_type bucket)
+  {
+    size_type result = 0;
+    for (hash_node* cur = buckets_[bucket]; cur; cur = cur->next)
+      ++result;
+    return result;
+  }
 
   Pair<iterator, bool> insert_unique(const value_type& v)
   {
     resize(num_elements_ + 1);
     return insert_unique_noresize(v);
   }
+  iterator insert_equal(const value_type& v)
+  {
+    resize(num_elements_ + 1);
+    return insert_equal_noresize(v);
+  }
 
+  template <class InputIterator>
+  void insert_unique(InputIterator first, InputIterator last)
+  {
+    insert_unique(first, last, iterator_category(first));
+  }
+
+  template <class InputIterator>
+  void insert_equal(InputIterator first, InputIterator last)
+  {
+    insert_equal(first, last, iterator_category(first));
+  }
+
+  template <class InputIterator>
+  void insert_unique(InputIterator first, InputIterator last,
+                     input_iterator_tag)
+  {
+    for ( ;first != last; ++first)
+      insert_unique(*first);
+  }
+
+  template <class InputIterator>
+  void insert_equal(InputIterator first, InputIterator last,
+                     input_iterator_tag)
+  {
+    for ( ;first != last; ++first)
+      insert_equal(*first);
+  }
+
+  template <class InputIterator>
+  void insert_unique(InputIterator first, InputIterator last,
+                     forward_iterator_tag)
+  {
+    size_type n = distance(first, last);
+    resize(num_elements_ + n);
+    for ( ; n > 0; n--,++first)
+      insert_unique_noresize(*first);
+  }
+
+  template <class InputIterator>
+  void insert_equal(InputIterator first, InputIterator last,
+                     forward_iterator_tag)
+  {
+    size_type n = distance(first, last);
+    resize(num_elements_ + n);
+    for ( ; n > 0; n--,++first)
+      insert_equal_noresize(*first);
+  }
+
+  reference find_of_insert(const value_type& v);
+
+  size_type erase(const key_type& key);
+  void erase(const iterator& it);
+  void erase(const const_iterator& it);
+  void erase(iterator first, iterator last);
+  void erase(const_iterator first, const_iterator last);
+
+  void resize(size_type);
+  void clear();
+public:
+
+  iterator find(const key_type&);
+  const_iterator find(const key_type&) const;
+  size_type count(const Key&) const;
+  Pair<iterator, iterator> equal_range(const key_type& key);
+  Pair<const_iterator, const_iterator> equal_range(const key_type& key) const;
 private:
   size_type next_size(size_type n) const { return NextPrime(n); }
   void initialize_buckets(size_type n)
@@ -256,11 +370,14 @@ private:
 
   size_type bkt_num_key(const key_type& key, size_type n) const
   {
-    return hash(key) % n;
+    return hash_(key) % n;
   }
 
-  void resize(size_type);
+  void copy_from(const HashTable& ht);
   Pair<iterator, bool> insert_unique_noresize(const value_type& v);
+  iterator insert_equal_noresize(const value_type& v);
+  void erase_bucket(const size_type n, hash_node* first, hash_node* last);
+  void erase_bucket(const size_type n, hash_node* first);
 private:
   hash_node* new_node(const value_type& v)
   {
@@ -268,11 +385,13 @@ private:
     node->next = nullptr;
     try {
       Construct(&node->val, v);
+      return node;
     }
     catch(...) {
       hash_node_allcoate::Deallocate(node);
       throw;
     }
+    return nullptr;
   }
 
   void delete_node(hash_node* node)
@@ -341,6 +460,172 @@ HashTableConstIterator<V, K, HF, Ex, Eq, A>::operator++(int)
   return tmp;
 }
 
+/* ----------------------- 操作符重载 ------------------------ */
+template <class Value, class Key, class HashFun,
+          class ExtractKey, class EqualKey, class Alloc>
+bool operator==(const HashTable<Value, Key, HashFun,
+                ExtractKey, EqualKey, Alloc>& x,
+                const HashTable<Value, Key, HashFun,
+                ExtractKey, EqualKey, Alloc>& y)
+{
+  typedef typename HashTable<Value, Key, HashFun, ExtractKey,
+                             EqualKey, Alloc>::hash_node hash_node;
+  if (x.buckets_.size() != y.buckets_.size())
+    return false;
+  for (int i = 0; i < x.buckets_.size(); i++) {
+    hash_node* cur_x = x.buckets_[i];
+    hash_node* cur_y = y.buckets_[i];
+    while (cur_x && cur_x && cur_x->val == cur_y->val)
+      cur_x = cur_x->next, cur_y = cur_y->next;
+    if (cur_x || cur_y)
+      return false;
+  }
+  return true;
+}
+
+/* ----------------------- 全局swap ------------------------ */
+//优先调用这个swap，其次才会调用Algorithm里面的swap
+template <class Value, class Key, class HashFun,
+          class ExtractKey, class EqualKey, class Alloc>
+void swap(HashTable<Value, Key, HashFun,
+          ExtractKey, EqualKey, Alloc>& x,
+          HashTable<Value, Key, HashFun,
+          ExtractKey, EqualKey, Alloc>& y)
+{
+  x.swap(y);
+}
+
+
+/* ----------------------- erase ------------------------ */
+/**
+ * 删除与这个key相等的元素
+ * @param key key
+ * return 返回删除的个数
+ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::size_type
+HashTable<V, K, HF, Ex, Eq, A>::erase(const key_type &key)
+{
+  const size_type n = bkt_num_key(key); //首先定位处key所属 bucket
+  hash_node* first = buckets_[n];
+  size_type erase_count = 0;          //删除的个数
+  //进行删除
+  if (first) {
+    hash_node* cur = first;
+    hash_node* next = first->next;
+    while (next) {
+      if (equals_(get_key(next->val), key)) {
+        cur->next = next->next;
+        delete_node(next);
+        next = cur->next;
+        --num_elements_;
+        ++erase_count;
+      }
+      else {
+        cur = next;
+        next = next->next;
+      }
+    }
+
+    // 处理开头处就和kay相等的情况，写的很玄妙。。。
+    if (equals_(get_key(get_key(first->val), key))) {
+      buckets_[n] = first->next;
+      delete_node(first);
+      --num_elements_;
+      ++erase_count;
+    }
+  }
+  return erase_count;
+
+}
+
+/**
+ * 删除指定处的元素
+ * @param num_elements_hint [description]
+ */
+ template <class V, class K, class HF, class Ex, class Eq, class A>
+ void HashTable<V, K, HF, Ex, Eq, A>::erase(const iterator &it)
+ {
+   if (hash_node* const p = it.cur) {
+     const size_type n = bkt_num(p->val);
+     hash_node* cur = buckets_[n];
+     //处理开头处就是it所在位置
+     if (cur == p) {
+       buckets_[n] = cur->next;
+       delete_node(cur);
+       --num_elements_;
+     }
+     else {
+       hash_node* next = cur->next;
+       while (next) {
+         if (equals_(get_key(next->val), get_key(p->val))) {
+           cur->next = next->next;
+           delete_node(next);
+           --num_elements_;
+           break;
+         }
+         else {
+           cur = cur->next;
+           next = next->next;
+         }
+       }
+     }
+   }
+ }
+
+ // 擦除指定区间的元素
+ template <class V, class K, class HF, class Ex, class Eq, class A>
+ void HashTable<V, K, HF, Ex, Eq, A>::erase(iterator first, iterator last)
+ {
+   size_type f_bucket = first.cur ? bkt_num(first.cur->val) : buckets_.size();
+   size_type l_bucket = last.cur ? bkt_num(last.cur->val) : buckets_.size();
+
+   if (first.cur == last.cur)
+     return;
+   else if (f_bucket == l_bucket)
+     erase_bucket(f_bucket, first.cur, last.cur);
+   else {
+     erase_bucket(f_bucket, first.cur, 0);
+     for (size_type n = f_bucket + 1; n < l_bucket; ++n)
+       erase_bucket(n, 0);
+     if (l_bucket != buckets_.size())
+       erase_bucket(l_bucket, last.cur);
+   }
+ }
+
+template <class V, class K, class HF, class Ex, class Eq, class A>
+inline void
+HashTable<V, K, HF, Ex, Eq, A>::erase(const_iterator first,
+                                      const_iterator last)
+{
+  erase(iterator(const_cast<hash_node*>(first.cur),
+                 const_cast<HashTable*>(first.ht)),
+        iterator(const_cast<hash_node*>(last.cur),
+                 const_cast<HashTable*>(last.ht)));
+}
+
+/* ----------------------- find_of_insert ------------------------ */
+// 先查找是否存在这个元素，存在直接放回，不存在插入这个元素
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::reference
+HashTable<V, K, HF, Ex, Eq, A>::find_of_insert(const value_type &v)
+{
+  resize(num_elements_ + 1);
+
+  const size_type n = bkt_num(v);
+  hash_node* first = buckets_[n];
+
+  for (hash_node* cur = first ; cur; cur = cur->next)
+    if (equals_(get_key(cur->val), get_key(v)))
+      return cur->val;
+  //没有找到
+  hash_node* node = new_node(v);
+  node->next = first;
+  buckets_[n] = node;
+  ++num_elements_;
+  return node->val;
+}
+
 /*--------------------  resize --------------------
                   判断是否需要重建表格                */
 template <class V, class K, class HF, class Ex, class Eq, class A>
@@ -398,20 +683,205 @@ HashTable<V, K, HF, Ex, Eq, A>::insert_unique_noresize(const value_type& v)
   const size_type n = bkt_num(v);
   hash_node* first = buckets_[n];
 
-  for (hash_node* cur = first; cur; ++cur)
+  for (hash_node* cur = first; cur; cur = cur->next)
     if (equals_(get_key(cur->val), get_key(v)))
       return make_pair(iterator(cur, this), false);
 
   hash_node* tmp = new_node(v);
-  new_node->next = first->next;
+  tmp->next = first;
   buckets_[n] = tmp;
   ++num_elements_;
   return make_pair(iterator(tmp, this), true);
 }
 
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::iterator
+HashTable<V, K, HF, Ex, Eq, A>::insert_equal_noresize(const value_type &v)
+{
+  const size_type n = bkt_num(v);
+  hash_node* first = buckets_[n];
+
+  for (hash_node* cur = first; cur; cur = cur->next)
+    if (equals_(get_key(cur->val), get_key(v))) {
+      hash_node* node = new_node(v);
+      node->next = cur->next;
+      cur->next = node;
+      ++num_elements_;
+      return iterator(node, this);
+    }
+
+  hash_node* tmp = new_node(v);
+  tmp->next = first;
+  buckets_[n] = tmp;
+  ++num_elements_;
+  return iterator(tmp, this);
+}
+
+/*--------------------  erase_bucket -------------------- */
+// 擦除指定映射位置的所有元素
+template <class V, class K, class HF, class Ex, class Eq, class A>
+void HashTable<V, K, HF, Ex, Eq, A>::erase_bucket(const size_type n,
+                                                  hash_node* first, hash_node* last)
+{
+  hash_node* cur = buckets_[n];
+  if (cur == first)
+    erase_bucket(n, last);
+  else {
+    hash_node* next;
+    for (next = cur->next; next != first; cur = next, next = cur->next)
+      ;
+    while (next) {
+      cur->next = next->next;
+      delete_node(next);
+      next = cur->next;
+      --num_elements_;
+    }
+  }
+}
+
+template <class V, class K, class HF, class Ex, class Eq, class A>
+void
+HashTable<V, K, HF, Ex, Eq, A>::erase_bucket(const size_type n, hash_node* last)
+{
+  hash_node* cur = buckets_[n];
+  while (cur != last) {
+    hash_node* next = cur->next;
+    delete_node(cur);
+    cur = next;
+    buckets_[n] = cur;
+    --num_elements_;
+  }
+}
+
+/* ----------------------- clear ------------------------ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+void HashTable<V, K, HF, Ex, Eq, A>::clear()
+{
+  for (size_type i = 0; i < buckets_.size(); i++) {
+    hash_node* cur = buckets_[i];
+    while (cur) {
+      hash_node* next = cur->next;
+      delete_node(cur);
+      cur = next;
+    }
+    buckets_[i] = nullptr;
+  }
+  num_elements_ = 0;
+}
+
+/* ----------------------- copy_from ------------------------ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+void HashTable<V, K, HF, Ex, Eq, A>::copy_from(const HashTable& ht)
+{
+  buckets_.clear();
+  buckets_.reserve(ht.buckets_.size());
+  try {
+    for (size_type i = 0; i < ht.buckets_.size(); ++i) {
+      if (const hash_node* cur = ht.buckets_[i]) {
+        hash_node* copy = new_node(cur->val);
+        buckets_[i] = copy;
 
 
+        for (hash_node* next = cur->next; next; cur = next, next = cur->next) {
+          copy->next = new_node(next->val);
+          copy = copy->next;
+        }
+      }
+    }
+    num_elements_ = ht.num_elements_;
+  }
+  catch(...) {
+    clear();
+    throw;
+  }
+}
 
+/* ----------------------- find ------------------------ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::iterator
+HashTable<V, K, HF, Ex, Eq, A>::find(const key_type& key)
+{
+  const size_type n = bkt_num_key(key); //找到key所属哪一个bucket
+  hash_node* first = buckets_[n];
+  while (first && !equals_(get_key(first->val), key))
+    first = first->next;
+  return iterator(first, this);
+}
 
-__GSTL_END_NAMESPACE
-#endif
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::const_iterator
+HashTable<V, K, HF, Ex, Eq, A>::find(const key_type& key) const
+{
+  const size_type n = bkt_num_key(key); //找到key所属哪一个bucket
+  hash_node* first = buckets_[n];
+  while (first && !equals_(get_key(first->val), key))
+    first = first->next;
+  return const_iterator(first, this);
+}
+
+/* ----------------------- count ------------------------ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+typename HashTable<V, K, HF, Ex, Eq, A>::size_type
+HashTable<V, K, HF, Ex, Eq, A>::count(const key_type& key) const
+{
+  const size_type n = bkt_num_key(key);
+  size_type result = 0;
+  hash_node* first = buckets_[n];
+  while (first) {
+    if (equals_(get_key(first->val), key))
+      result++;
+    first = first->next;
+  }
+  return result;
+}
+
+/* ----------------------- equal_range ------------------------ */
+template <class V, class K, class HF, class Ex, class Eq, class A>
+Pair<typename HashTable<V, K, HF, Ex, Eq, A>::iterator,
+     typename HashTable<V, K, HF, Ex, Eq, A>::iterator>
+HashTable<V, K, HF, Ex, Eq, A>::equal_range(const key_type& key)
+{
+  typedef Pair<iterator, iterator> pii;
+  const size_type n = bkt_num_key(key);
+
+  for (const hash_node* first = buckets_[n] ; first; first = first->next) {
+    if (equals_(get_key(first->val), key)) {
+      for (const hash_node* cur = first->next; cur; cur = cur->next)
+      if (!equals_(get_key(cur->val), key))
+      return pii(iterator(first, this),
+      const_iterator(cur, this));
+      for (size_type m = n + 1; m < buckets_.size(); ++m)
+      if (buckets_[m])
+      return pii(iterator(first, this),
+      const_iterator(buckets_[m], this));
+      return pii(iterator(first, this), end());
+    }
+  }
+  return pii(end(), end());
+}
+
+template <class V, class K, class HF, class Ex, class Eq, class A>
+Pair<typename HashTable<V, K, HF, Ex, Eq, A>::const_iterator,
+     typename HashTable<V, K, HF, Ex, Eq, A>::const_iterator>
+HashTable<V, K, HF, Ex, Eq, A>::equal_range(const key_type& key) const
+{
+  typedef Pair<const_iterator, const_iterator> pii;
+  const size_type n = bkt_num_key(key);
+
+  for (const hash_node* first = buckets_[n] ; first; first = first->next) {
+    if (equals_(get_key(first->val), key)) {
+      for (const hash_node* cur = first->next; cur; cur = cur->next)
+      if (!equals_(get_key(cur->val), key))
+      return pii(const_iterator(first, this),
+      const_iterator(cur, this));
+      for (size_type m = n + 1; m < buckets_.size(); ++m)
+      if (buckets_[m])
+      return pii(const_iterator(first, this),
+      const_iterator(buckets_[m], this));
+      return pii(const_iterator(first, this), end());
+    }
+  }
+  return pii(end(), end());
+}
+__GSTL_END_NAMESPACE    // End namespace
+#endif        // end hashtable
