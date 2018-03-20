@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T11:59:22+08:00
+ * @Last modified time: 2018-03-20T17:02:34+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -284,6 +284,119 @@ copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last,
 }
 
 
+/* ------------------------ lower_bound ------------------------ */
+template <class ForwardIterator, class Value, class Distance>
+inline ForwardIterator
+__lower_bound(ForwardIterator first, ForwardIterator last,
+              const Value& value, Distance*, forward_iterator_tag)
+{
+  Distance len = distance(first, last);
+  Distance half;
+  ForwardIterator middle;
+
+  while (len > 0) {
+    middle = first;
+    half = len >> 1;
+    advance(middle, half);
+    if (*middle < value) {
+      first = middle;
+      ++first;
+      len = len - half - 1;
+    }
+    else
+      len = half;
+  }
+  return first;
+}
+
+template <class RandomAccessIterator, class Value, class Distance>
+inline RandomAccessIterator
+__lower_bound(RandomAccessIterator first, RandomAccessIterator last,
+              const Value& value, Distance*, random_access_iterator_tag)
+{
+  Distance len = last - first;
+  Distance half;
+  RandomAccessIterator middle;
+
+  while (len > 0) {
+    half = len >> 1;
+    middle = first + half;
+    if (*middle < value) {
+      first = middle + 1;
+      len = len - half - 1;
+    }
+    else
+      len = half;
+  }
+  return first;
+}
+
+template <class ForwardIterator, class Value,
+        class Compare, class Distance>
+inline ForwardIterator
+__lower_bound(ForwardIterator first, ForwardIterator last,
+              const Value& value, Compare comp, Distance*, forward_iterator_tag)
+{
+  Distance len = distance(first, last);
+  Distance half;
+  ForwardIterator middle;
+
+  while (len > 0) {
+    middle = first;
+    half = len >> 1;
+    advance(middle, half);
+    if (comp(*middle, value)) {
+      first = middle;
+      ++first;
+      len = len - half - 1;
+    }
+    else
+      len = half;
+  }
+  return first;
+}
+
+template <class RandomAccessIterator, class Value,
+          class Compare, class Distance>
+inline RandomAccessIterator
+__lower_bound(RandomAccessIterator first, RandomAccessIterator last,
+              const Value& value, Compare comp, Distance*, random_access_iterator_tag)
+{
+  Distance len = last - first;
+  Distance half;
+  RandomAccessIterator middle;
+
+  while (len > 0) {
+    half = len >> 1;
+    middle = first + half;
+    if (comp(*middle, value)) {
+      first = middle + 1;
+      len = len - half - 1;
+    }
+    else
+      len = half;
+  }
+  return first;
+}
+
+
+template <class ForwardIterator, class Value>
+inline ForwardIterator
+lower_bound(ForwardIterator first, ForwardIterator last,
+            const Value& value)
+{
+  return __lower_bound(first,last, value, distance_type(first),
+                       iterator_category(first));
+}
+
+template <class ForwardIterator, class Value, class Compare>
+inline ForwardIterator
+lower_bound(ForwardIterator first, ForwardIterator last,
+            const Value& value, Compare comp)
+{
+  return __lower_bound(first, last, value, comp, distance_type(first),
+                       iterator_category(first));
+}
 
 
 __GSTL_END_NAMESPACE
