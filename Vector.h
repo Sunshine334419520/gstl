@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: gvector.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-15T14:33:51+08:00
+ * @Last modified time: 2018-03-20T17:37:37+08:00
  */
 
 #ifndef GSTL_VECTOR_H
@@ -132,7 +132,7 @@ public:
     if (n > capacity()) {
       size_type old_size = size();
       iterator tmp = allocate_and_copy(n, start_, finish_);
-      Destory(start_, finish_);
+      Destroy(start_, finish_);
       deallocate();
 
       start_ = tmp;
