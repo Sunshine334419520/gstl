@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: HashTable.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-20T17:53:03+08:00
+ * @Last modified time: 2018-03-21T17:38:47+08:00
  */
 
 #ifndef GSTL_HASH_TABLE_H
@@ -12,9 +12,9 @@
 
 #include <cstddef>
 #include "config.h"
-#include "alloc.h"
-#include "construct.h"
-#include "iterator.h"
+#include "Alloc.h"
+#include "Construct.h"
+#include "Iterator.h"
 #include "Pair.h"
 #include "Algorithm.h"
 #include "Vector.h"
@@ -101,8 +101,8 @@ struct HashTableConstIterator {
   typedef HashTableNode<Value> hash_node;
   typedef forward_iterator_tag iterator_category;
   typedef Value                value_type;
-  typedef Value*               pointer;
-  typedef Value&               reference;
+  typedef const Value*         const_pointer;
+  typedef const Value&         const_reference;
   typedef ptrdiff_t            difference_type;
   typedef size_t               size_type;
 
@@ -112,19 +112,19 @@ struct HashTableConstIterator {
   //  构造函数
   HashTableConstIterator() : cur(nullptr), ht(nullptr) {}
   HashTableConstIterator(const hash_node* n, const hashtable* tab)
-   : cur(n), ht(n) {}
+   : cur(n), ht(tab) {}
   HashTableConstIterator(const iterator& it)
    : cur(it.cur), ht(it.ht) {}
 
   //操作符重载
-  reference operator*() const { return cur->val; }
-  pointer operator->() const { return &(operator*()); }
+  const_reference operator*() const { return cur->val; }
+  const_pointer operator->() const { return &(operator*()); }
 
   const_iterator& operator++();
   const_iterator operator++(int);
 
-  bool operator==(const iterator& it) const { return cur == it.cur; }
-  bool operator!=(const iterator& it) const { return cur != it.cur; }
+  bool operator==(const const_iterator& it) const { return cur == it.cur; }
+  bool operator!=(const const_iterator& it) const { return cur != it.cur; }
 };
 
 static const int num_primes = 28;
