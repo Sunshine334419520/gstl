@@ -4,11 +4,14 @@
  * @Email:  guang334419520@126.com
  * @Filename: Functional.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-17T16:01:10+08:00
+ * @Last modified time: 2018-03-21T15:41:02+08:00
  */
 
-#ifndef GSTL_FUNCTIONAL_H
-#define GSTL_FUNCTIONAL_H
+#ifndef __GSTL_FUNCTIONAL_H
+#define __GSTL_FUNCTIONAL_H
+
+#include "config.h"
+#include <cstring>
 
 __GSTL_BEGIN_NAMESPACE
 
@@ -63,6 +66,20 @@ struct Negate : public UnaryFunction<T, T> {
 template <class T>
 struct EqualTo : public BinaryFunction<T, T, bool> {
   bool operator()(const T& x, const T& y) const { return x == y; }
+};
+
+__GSTL_TEMPLATE_NULL struct EqualTo<char *> {
+  bool operator()(const char* s1, const char* s2) const
+  {
+    return strcmp(s1, s2) == 0;
+  }
+};
+
+__GSTL_TEMPLATE_NULL struct EqualTo<const char *> {
+  bool operator()(const char* s1, const char* s2) const
+  {
+    return strcmp(s1, s2) == 0;
+  }
 };
 
 template <class T>
