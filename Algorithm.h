@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-20T17:02:34+08:00
+ * @Last modified time: 2018-03-21T16:04:30+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -199,14 +199,14 @@ copy(InputIterator first, InputIterator last, OutputIterator result)
   return __copy_dispatch<InputIterator, OutputIterator>()(first, last, result);
 }
 
-__STL_TEMPLATE_NULL inline char*
+__GSTL_TEMPLATE_NULL inline char*
 copy(const char* first, const char* last, char* result)
 {
   memmove(result, first, last - first);
   return result + (last - first);
 }
 
-__STL_TEMPLATE_NULL inline wchar_t*
+__GSTL_TEMPLATE_NULL inline wchar_t*
 copy(const wchar_t* first, const wchar_t* last, wchar_t* result)
 {
   memmove(result, first, sizeof(wchar_t) * (last - first));

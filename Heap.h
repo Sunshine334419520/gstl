@@ -4,15 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: heap.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-11T16:56:11+08:00
+ * @Last modified time: 2018-03-21T17:45:53+08:00
  */
 
 #ifndef GSTL_HEAP_H
 #define GSTL_HEAP_H
 
-#include "allocate.h"
+#include "Allocate.h"
 
-#include "iterator.h"
+#include "Iterator.h"
 
 __GSTL_BEGIN_NAMESPACE
 

@@ -4,11 +4,11 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_construct.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T13:45:32+08:00
+ * @Last modified time: 2018-03-21T16:06:54+08:00
  */
 
-#ifndef GSTL_CONSTRUCT_H
-#define GSTL_CONSTRUCT_H
+#ifndef __GSTL_CONSTRUCT_H
+#define __GSTL_CONSTRUCT_H
 
 #include <new>
 #include "Traits.h"
@@ -66,13 +66,13 @@ inline void Destroy(ForwordIterator first, ForwordIterator last)
 
 
 // specialized version of the Destroy, For Iterator is char*, char*
-__STL_TEMPLATE_NULL
+__GSTL_TEMPLATE_NULL
 inline void Destroy(char*, char*)
 {
 }
 
 // specialized version of the Destroy, For Iterator is w_char_t*, w_char_t*
-__STL_TEMPLATE_NULL
+__GSTL_TEMPLATE_NULL
 inline void Destroy(wchar_t*, wchar_t*)
 {
 }

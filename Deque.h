@@ -4,19 +4,19 @@
  * @Email:  guang334419520@126.com
  * @Filename: Deque.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-15T14:33:33+08:00
+ * @Last modified time: 2018-03-21T17:39:58+08:00
  */
 
-#ifndef GSTL_DEQUE_H
-#define GSTL_DEQUE_H
+#ifndef __GSTL_DEQUE_H
+#define __GSTL_DEQUE_H
 
-#include "allocate.h"
+#include "Allocate.h"
 #include "Uninitialized.h"
-#include "iterator.h"
+#include "Iterator.h"
 #include "Algorithm.h"
-#include "reverseiterator.h"
-#ifndef GSTL_RLPOS_H
-  #include "relops.h"
+#include "ReverseIterator.h"
+#ifndef __GSTL_RLPOS_H
+  #include "Relops.h"
 #endif
 
 __GSTL_BEGIN_NAMESPACE
