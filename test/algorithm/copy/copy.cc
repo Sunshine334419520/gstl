@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: test.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-28T12:38:36+08:00
+ * @Last modified time: 2018-03-17T17:50:01+08:00
  */
 
 #include <iostream>
@@ -12,6 +12,7 @@
 #include <deque>
 #include <list>
 #include <algorithm>
+
 
 using std::cout;
 using std::endl;
@@ -33,6 +34,7 @@ int main(int argc, char const *argv[]) {
   std::copy(ccs, ccs + 5, ccd);
   // 调用来源
   // copy(const char*)
+
 
   // test 2
   const wchar_t cwcs[5] = {'a', 'b', 'c', 'd', 'e'};  //数据来源
