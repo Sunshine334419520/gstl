@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: uninitialized.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T21:04:50+08:00
+ * @Last modified time: 2018-03-15T14:30:59+08:00
  */
 
 #ifndef GSTL_UNINITIALIZED_H
@@ -162,7 +162,7 @@ __uninitialized_copy_copy(InputIterator1 first1, InputIterator1 last1,
   try {
     return uninitialized_copy(first2, last2, mid);
   }
-  catch (...) { Destroy(result, mid); }
+  catch (...) { Destroy(result, mid); throw; }
 
   //return static_cast<ForwardIterator>(0);
 }
@@ -179,7 +179,7 @@ __uninitialized_fill_copy(ForwardIterator result, ForwardIterator mid,
   try {
     return uninitialized_copy(first, last, mid);
   }
-  catch (...){ Destroy(result, mid); }
+  catch (...){ Destroy(result, mid); throw; }
   //return static_cast<ForwardIterator>(0);
 }
 
@@ -195,7 +195,7 @@ __uninitialized_copy_fill(InputIterator first1, InputIterator last1,
   try {
     uninitialized_fill(mid2, last2, x);
   }
-  catch (...) { Destroy(first2, mid2); }
+  catch (...) { Destroy(first2, mid2); throw; }
 }
 
 

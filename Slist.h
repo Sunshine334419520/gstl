@@ -4,19 +4,19 @@
  * @Email:  guang334419520@126.com
  * @Filename: Slist.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-15T14:30:23+08:00
+ * @Last modified time: 2018-03-21T17:43:37+08:00
  */
 
-#ifndef GSTL_SLIST_H
-#define GSTL_SLIST_H
+#ifndef __GSTL_SLIST_H
+#define __GSTL_SLIST_H
 
-#include "allocate.h"
+#include "Allocate.h"
 #include "Uninitialized.h"
-#include "iterator.h"
+#include "Iterator.h"
 #include "Algorithm.h"
 //#include "reverseiterator.h"
- #ifndef GSTL_RLPOS_H
-  #include "relops.h"
+ #ifndef __GSTL_RLPOS_H
+  #include "Relops.h"
 #endif
 __GSTL_BEGIN_NAMESPACE
 

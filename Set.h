@@ -4,15 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: set.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T11:51:39+08:00
+ * @Last modified time: 2018-03-21T17:43:16+08:00
  */
- #ifndef GSTL_SET_H
- #define GSTL_SET_H
+ #ifndef __GSTL_SET_H
+ #define __GSTL_SET_H
 
 #include "config.h"
 #include "RB_tree.h"
 #include "Functional.h"
-#include "relops.h"
+#include "Relops.h"
 
 
 __GSTL_BEGIN_NAMESPACE

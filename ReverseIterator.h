@@ -4,14 +4,14 @@
  * @Email:  guang334419520@126.com
  * @Filename: reverseiterator.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-10T21:35:06+08:00
+ * @Last modified time: 2018-03-21T17:43:00+08:00
  */
 
-#ifndef GSTL_REVERSE_ITERATOR_H
-#define GSTL_REVERSE_ITERATOR_H
+#ifndef __GSTL_REVERSE_ITERATOR_H
+#define __GSTL_REVERSE_ITERATOR_H
 
 
-#include "iterator.h"
+#include "Iterator.h"
 
 __GSTL_BEGIN_NAMESPACE
 

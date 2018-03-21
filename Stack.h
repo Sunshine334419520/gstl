@@ -4,15 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: Stack.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-13T17:52:43+08:00
+ * @Last modified time: 2018-03-21T17:43:49+08:00
  */
 #ifndef GSTL_STACK_H
 #define GSTL_STACK_H
 
 #include "Deque.h"
 
-#ifndef GSTL_RLPOS_H
-  #include "relops.h"
+#ifndef __GSTL_RLPOS_H
+  #include "Relops.h"
 #endif
 
 __GSTL_BEGIN_NAMESPACE

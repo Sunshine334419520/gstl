@@ -4,17 +4,17 @@
  * @Email:  guang334419520@126.com
  * @Filename: gvector.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-20T17:37:37+08:00
+ * @Last modified time: 2018-03-21T17:44:12+08:00
  */
 
-#ifndef GSTL_VECTOR_H
-#define GSTL_VECTOR_H
+#ifndef __GSTL_VECTOR_H
+#define __GSTL_VECTOR_H
 
-#include "allocate.h"
+#include "Allocate.h"
 #include "Uninitialized.h"
-#include "iterator.h"
+#include "Iterator.h"
 #include "Algorithm.h"
-#include "reverseiterator.h"
+#include "ReverseIterator.h"
 
 __GSTL_BEGIN_NAMESPACE      //namespace gstl {
 
