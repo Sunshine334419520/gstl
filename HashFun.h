@@ -4,12 +4,12 @@
  * @Email:  guang334419520@126.com
  * @Filename: HashFun.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-20T17:27:33+08:00
+ * @Last modified time: 2018-03-21T15:32:43+08:00
  */
 
 
-#ifndef GSTL_HASH_FUN_H
-#define GSTL_HASH_FUN_H
+#ifndef __GSTL_HASH_FUN_H
+#define __GSTL_HASH_FUN_H
 
 #include <cstdlib>
 #include <string>
@@ -37,55 +37,55 @@ inline size_t HashString(const std::string& s)
   return static_cast<size_t>(h);
 }
 
-template <> struct Hash<std::string>
+__GSTL_TEMPLATE_NULL struct Hash<std::string>
 {
   size_t operator()(const std::string& s) const { return HashString(s); }
 };
 
 
-template <> struct Hash<char*>
+__GSTL_TEMPLATE_NULL struct Hash<char*>
 {
   size_t operator()(const char* s) const { return HashString(s); }
 };
-template <> struct Hash<const char*>
+__GSTL_TEMPLATE_NULL struct Hash<const char*>
 {
   size_t operator()(const char* s) const { return HashString(s); }
 };
 
-template <> struct Hash<char>
+__GSTL_TEMPLATE_NULL struct Hash<char>
 {
   size_t operator()(char x) const { return x; }
 };
-template <> struct Hash<unsigned char>
+__GSTL_TEMPLATE_NULL struct Hash<unsigned char>
 {
   size_t operator()(unsigned char x) const { return x; }
 };
-template <> struct Hash<signed char>
+__GSTL_TEMPLATE_NULL struct Hash<signed char>
 {
   size_t operator()(unsigned char x) const { return x; }
 };
 
-template <> struct Hash<short>
+__GSTL_TEMPLATE_NULL struct Hash<short>
 {
   size_t operator()(short x) const { return x; }
 };
-template <> struct Hash<unsigned short>
+__GSTL_TEMPLATE_NULL struct Hash<unsigned short>
 {
   size_t operator()(short x) const { return x;}
 };
-template <> struct Hash<int>
+__GSTL_TEMPLATE_NULL struct Hash<int>
 {
   size_t operator()(int x) const { return x; }
 };
-template <> struct Hash<unsigned int>
+__GSTL_TEMPLATE_NULL struct Hash<unsigned int>
 {
   size_t operator()(unsigned int x) const { return x; }
 };
-template <> struct Hash<long>
+__GSTL_TEMPLATE_NULL struct Hash<long>
 {
   size_t operator()(long x) const { return x; }
 };
-template <> struct Hash<unsigned long>
+__GSTL_TEMPLATE_NULL struct Hash<unsigned long>
 {
   size_t operator()(unsigned long x) const { return x; }
 };
