@@ -4,14 +4,14 @@
  * @Email:  guang334419520@126.com
  * @Filename: PriorityQueue.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-15T14:33:45+08:00
+ * @Last modified time: 2018-03-21T17:41:27+08:00
  */
 
-#ifndef GSTL_PRIORITYQUEUE_H
-#define GSTL_PRIORITYQUEUE_H
+#ifndef __GSTL_PRIORITYQUEUE_H
+#define __GSTL_PRIORITYQUEUE_H
 
 #include "Vector.h"
-#include "heap.h"
+#include "Heap.h"
 
 __GSTL_BEGIN_NAMESPACE
 

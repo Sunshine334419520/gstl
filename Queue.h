@@ -4,16 +4,16 @@
  * @Email:  guang334419520@126.com
  * @Filename: Queue.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-11T13:26:28+08:00
+ * @Last modified time: 2018-03-21T17:41:39+08:00
  */
 
-#ifndef GSTL_QUEUE_H
-#define GSTL_QUEUE_H
+#ifndef __GSTL_QUEUE_H
+#define __GSTL_QUEUE_H
 
 #include "Deque.h"
 
 #ifndef GSTL_RLPOS_H
-  #include "relops.h"
+  #include "Relops.h"
 #endif
 __GSTL_BEGIN_NAMESPACE
 

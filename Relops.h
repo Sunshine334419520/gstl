@@ -4,11 +4,13 @@
  * @Email:  guang334419520@126.com
  * @Filename: relops.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-11T12:13:20+08:00
+ * @Last modified time: 2018-03-21T17:42:33+08:00
  */
 
 #ifndef GSTL_RLPOS_H
 #define GSTL_RLPOS_H
+
+#include "config.h"
 
 __GSTL_BEGIN_NAMESPACE
 

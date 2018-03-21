@@ -4,20 +4,20 @@
  * @Email:  guang334419520@126.com
  * @Filename: RB_tree.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T14:05:34+08:00
+ * @Last modified time: 2018-03-21T17:42:11+08:00
  */
 
-#ifndef GSTL_RB_TREE_H
-#define GSTL_RB_TREE_H
+#ifndef __GSTL_RB_TREE_H
+#define __GSTL_RB_TREE_H
 
-#include "allocate.h"
+#include "Allocate.h"
 #include "Uninitialized.h"
-#include "iterator.h"
+#include "Iterator.h"
 #include "Algorithm.h"
-#include "reverseiterator.h"
+#include "ReverseIterator.h"
 #include "Pair.h"
-#ifndef GSTL_RLPOS_H
-  #include "relops.h"
+#ifndef __GSTL_RLPOS_H
+  #include "Relops.h"
 #endif
 
 __GSTL_BEGIN_NAMESPACE
