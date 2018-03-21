@@ -4,11 +4,11 @@
  * @Email:  guang334419520@126.com
  * @Filename: memory.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-02-26T15:01:20+08:00
+ * @Last modified time: 2018-03-21T17:46:13+08:00
  */
 
-#ifndef GSTL_MEMORY_H
-#define GSTL_MEMORY_H
+#ifndef __GSTL_MEMORY_H
+#define __GSTL_MEMORY_H
 
 #include <utility>
 

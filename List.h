@@ -4,20 +4,20 @@
  * @Email:  guang334419520@126.com
  * @Filename: List.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-13T14:35:59+08:00
+ * @Last modified time: 2018-03-21T17:39:37+08:00
  */
 
-#ifndef GSTL_LIST_H
-#define GSTL_LIST_H
+#ifndef __GSTL_LIST_H
+#define __GSTL_LIST_H
 
-#include "allocate.h"
+#include "Allocate.h"
 #include "Algorithm.h"
 #include "Uninitialized.h"
-#include "iterator.h"
+#include "Iterator.h"
 #include "Traits.h"
-#include "reverseiterator.h"
+#include "ReverseIterator.h"
 
-#ifndef GSTL_RLPOS_H
+#ifndef __GSTL_RLPOS_H
     #include "relops.h"
 
 #endif

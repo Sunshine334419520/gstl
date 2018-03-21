@@ -4,16 +4,16 @@
  * @Email:  guang334419520@126.com
  * @Filename: MulteSet.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T14:14:07+08:00
+ * @Last modified time: 2018-03-21T17:40:43+08:00
  */
 
-#ifndef GSTL_MULTESET_H
-#define GSTL_MULTESET_H
+#ifndef __GSTL_MULTE_SET_H
+#define __GSTL_MULTE_SET_H
 
 #include "config.h"
 #include "RB_tree.h"
 #include "Functional.h"
-#include "relops.h"
+#include "Relops.h"
 
 
 __GSTL_BEGIN_NAMESPACE

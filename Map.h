@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Map.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-18T16:35:09+08:00
+ * @Last modified time: 2018-03-21T17:39:24+08:00
  */
 
 #ifndef GSTL_MAP_H
@@ -12,7 +12,7 @@
 
 #include "RB_tree.h"
 #include "Functional.h"
-#include "relops.h"
+#include "Relops.h"
 
 __GSTL_BEGIN_NAMESPACE
 

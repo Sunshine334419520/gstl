@@ -4,14 +4,14 @@
  * @Email:  guang334419520@126.com
  * @Filename: MultiMap.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-19T14:09:12+08:00
+ * @Last modified time: 2018-03-21T17:41:00+08:00
  */
-#ifndef GSTL_MULTIMAP_H
-#define GSTL_MULTIMAP_H
+#ifndef __GSTL_MULTI_MAP_H
+#define __GSTL_MULTI_MAP_H
 
 #include "RB_tree.h"
 #include "Functional.h"
-#include "relops.h"
+#include "Relops.h"
 
  __GSTL_BEGIN_NAMESPACE
 
