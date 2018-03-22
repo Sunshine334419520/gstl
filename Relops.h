@@ -7,8 +7,8 @@
  * @Last modified time: 2018-03-21T17:42:33+08:00
  */
 
-#ifndef GSTL_RLPOS_H
-#define GSTL_RLPOS_H
+#ifndef __GSTL_RLPOS_H
+#define __GSTL_RLPOS_H
 
 #include "config.h"
 
