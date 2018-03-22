@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Algorithm.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-21T16:04:30+08:00
+ * @Last modified time: 2018-03-22T12:20:41+08:00
  */
 
 #ifndef GSTL_ALGORITHM_H
@@ -15,7 +15,7 @@
 #endif
 
 #ifndef GSTL_ITERATOR_H
-#include "iterator.h"
+#include "Iterator.h"
 #endif
 
 #include "Traits.h"
@@ -112,6 +112,22 @@ bool lexicographical_compare(Inputerator1 first1, Inputerator1 last1,
     if (*first1 < *first2)
       return true;
     if (*first2 < *first1)
+      return false;
+  }
+
+
+  return first1 ==last1 && first2 != last2;
+}
+
+template <class Inputerator1, class Inputerator2, class BinaryOperation>
+bool lexicographical_compare(Inputerator1 first1, Inputerator1 last1,
+                             Inputerator2 first2, Inputerator2 last2,
+                             BinaryOperation binary_op)
+{
+  for ( ; first1 != last1 && first2 != last2; ++first1, ++first2) {
+    if (binary_op(*first1, *first2))
+      return true;
+    if (binary_op(*first2, *first1))
       return false;
   }
 
@@ -398,6 +414,98 @@ lower_bound(ForwardIterator first, ForwardIterator last,
                        iterator_category(first));
 }
 
+
+/* ------------------------ Set_union ------------------------ */
+template <class InputIterator1, class InputIterator2, class OutputIterator>
+OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
+                         InputIterator2 first2, InputIterator2 last2,
+                         OutputIterator result)
+{
+  while (first1 != last1 && first2 != last2) {
+    if (*first1 < *first2) {
+      *result = *first1;
+      ++first1;
+    }
+    else if (*first2 < *first1) {
+      *result = *first2;
+      ++first2;
+    }
+    else {
+      *result = *first1;
+      ++first1;
+      ++first2;
+    }
+    ++result;
+  }
+  return copy(first1, last1, copy(first2, last2, result));
+}
+
+template <class InputIterator1, class InputIterator2,
+          class OutputIterator, class BinaryOperation>
+OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
+                         InputIterator2 first2, InputIterator2 last2,
+                         OutputIterator result,BinaryOperation binary_op)
+{
+  while (first1 != last1 && first2 != last2) {
+    if (binary_op(*first1, *first2)) {
+      *result = *first1;
+      ++first1;
+    }
+    else if (binary_op(*first2, *first1)) {
+      *result = *first2;
+      ++first2;
+    }
+    else {
+      *result = *first1;
+      ++first1;
+      ++first2;
+    }
+    ++result;
+  }
+  return copy(first1, last1, copy(first2, last2, result));
+}
+
+/* ------------------------ Set_union ------------------------ */
+template <class InputIterator1, class InputIterator2, class OutputIterator>
+OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
+                                InputIterator2 first2, InputIterator2 last2,
+                                OutputIterator result)
+{
+  while (first1 != last1 && first2 != last2) {
+    if (*first1 < *first2)
+      ++first1;
+    else if (*first2 < *first1)
+      ++first2;
+    else {
+      *result = *first1;
+      ++first1;
+      ++first2;
+      ++result;
+    }
+  }
+  return result;
+}
+
+template <class InputIterator1, class InputIterator2,
+          class OutputIterator, class BinaryOperation>
+OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
+                                InputIterator2 first2, InputIterator2 last2,
+                                OutputIterator result, BinaryOperation binary_op)
+{
+  while (first1 != last1 && first2 != last2) {
+    if (binary_op(*first1, *first2))
+      ++first1;
+    else if (binary_op(*first2, *first1))
+      ++first2;
+    else {
+      *result = *first1;
+      ++first1;
+      ++first2;
+      ++result;
+    }
+  }
+  return result;
+}
 
 __GSTL_END_NAMESPACE
 
