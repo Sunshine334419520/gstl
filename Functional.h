@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Functional.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-21T15:41:02+08:00
+ * @Last modified time: 2018-03-22T12:20:37+08:00
  */
 
 #ifndef __GSTL_FUNCTIONAL_H
@@ -27,6 +27,8 @@ struct BinaryFunction {
   typedef Arg2    sencond_argument_type;
   typedef Result  result_type;
 };
+
+
 
 /* ----------------------  算术类仿函数  ----------------------*/
 
@@ -148,6 +150,21 @@ template <class Arg1, class Arg2>
 struct Project1st : public BinaryFunction<Arg1, Arg2, Arg1> {
   Arg1 operator()(const Arg1& x, const Arg2& y) { return x; }
 };
+
+template <class T>
+inline
+T IdentityElement(Plus<T>)
+{
+  return T(0);
+}
+
+template <class T>
+inline
+T IdentityElement(Multiplies<T>)
+{
+  return T(1);
+}
+
 
 __GSTL_END_NAMESPACE
 
