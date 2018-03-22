@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: stl_simple_construct.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-21T16:06:54+08:00
+ * @Last modified time: 2018-03-22T12:35:13+08:00
  */
 
 #ifndef __GSTL_CONSTRUCT_H
@@ -12,7 +12,7 @@
 
 #include <new>
 #include "Traits.h"
-#include "iterator.h"
+#include "Iterator.h"
 
 __GSTL_BEGIN_NAMESPACE    //namespace name
 
