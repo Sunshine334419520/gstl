@@ -31,9 +31,16 @@ gstl
     * map:                    100%
     * multimmap:              100%
     * hashtable:              100%
-    * hashset :               0%
-    * hashmap :               0%
+    * hashset :               100%
+    * hashmap :               100%
 * STL Algorithms:  
+      * STL Numeric
+        * accmulate :     100%
+        * adjacent_difference :       100%
+        * inner_product :       100%
+        * partial_sum :         100%
+        * power :       100%
+        * iota :    100%
     * fill :                  100%
     * fill_n :                100%
     * find :                  100%
@@ -82,7 +89,7 @@ gstl
   * vector：                       100%
   * string：                       0%
   * pair：                         100%
-  * algorithm：                    10%
+  * algorithm：                    20%
   * priority_queue：               100%
   * suffix_array：                 0%
   * queue：                        100%
@@ -98,8 +105,8 @@ gstl
   * map:                    100%
   * multimmap:              100%
   * hashtable:              100%
-  * hashset :               0%
-  * hashmap :               0%
+  * hashset :               100%
+  * hashmap :               100%
   * avl_tree：                     0%
   * unordered_set：                0%
   * directed_graph：               0%
