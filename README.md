@@ -34,7 +34,7 @@ gstl
     * hashset :               100%
     * hashmap :               100%
 * STL Algorithms:  
-      * STL Numeric
+    * STL Numeric : 
         * accmulate :     100%
         * adjacent_difference :       100%
         * inner_product :       100%
@@ -74,7 +74,7 @@ gstl
 
 
 * 其他组件：
-    * hash_fun                    100%
+    * hash_fun :                  100%
     * circular_buffer :           0%   
     * bitmap :                    0%
     * binary_search_tree :        0%
