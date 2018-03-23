@@ -34,7 +34,7 @@ gstl
     * hashset :               100%
     * hashmap :               100%
 * STL Algorithms:  
-    * STL Numeric : 
+    * STL Numeric :
         * accmulate :     100%
         * adjacent_difference :       100%
         * inner_product :       100%
@@ -46,7 +46,7 @@ gstl
     * find :                  100%
     * copy :                  100%
     * swap :                  100%
-    * min、max :               50%
+    * min、max :               100%
     * equal :                 100%
     * make_heap :             100%
     * pop_heap :              100%
@@ -55,12 +55,14 @@ gstl
     * all_of :                0%
     * any_of :                0%
     * none_of :               0%
-    * find_if :               0%
+    * find_if :               100%
+    * find_end :              100%
+    * find_first_of           100%
     * find_if_not :           0%
     * adjacent_find :         0%
-    * count :                 0%
-    * count_if :              0%
-    * mismatch :              0%
+    * count :                 100%
+    * count_if :              100%
+    * mismatch :              100%
 	  * is_permutation :        0%
 	  * search :                0%
 	  * advance :               100%
@@ -68,10 +70,51 @@ gstl
     * lower_bound             100%
     * upper_bound             0%
 	  * sort :                  0%
-	  * generate :              0%
-	  * generate_n :            0%
+	  * generate :              100%
+	  * generate_n :            100%
+    * includes :              100%
+    * for_each :              100%
+    * generate :              100%
+    * generate_n :            100%
+    * max_element :           100%
+    * min_element :           0%
+    * merge :                 0%
+    * partition :             0%
+    * remove :                0%
+    * remove_copy :           0%
+    * remove_if :             0%
+    * remove_copy_if :        0%
+    * replace :               0%
+    * replace_copy :               0%
+    * replace_if :            0%
+    * replace_copy_if :       0%
+    * reverse :               0%
+    * reverse_copy :          0%
+    * rotate :                0%
 
 
+* STL Functor :
+    * 算术类 :        100%
+    * 关系运算类 :     100%
+    * 逻辑运算类 :     100%
+    * Identity :     100%
+    * Select :       100%
+    * Project :      100%
+
+* STL Adapters :
+    * reverse_iterator :      100%
+    * istream_iterator :       0%
+    * ostream_iterator :      0%
+    * insert_iterator :       0%
+    * back_insert_iterator :  0%
+    * front_insert_iterator :   0%
+    * not1 :      100%
+    * not2 :      100%
+    * bind1st :   100%
+    * bind2nd :   100%
+    * compose1  :   0%
+    * compose2 :  0%
+    * ptr_fun     0%
 
 * 其他组件：
     * hash_fun :                  100%
