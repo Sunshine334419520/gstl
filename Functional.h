@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Functional.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-22T12:20:37+08:00
+ * @Last modified time: 2018-03-23T17:00:30+08:00
  */
 
 #ifndef __GSTL_FUNCTIONAL_H
@@ -23,7 +23,7 @@ struct UnaryFunction {
 
 template <class Arg1, class Arg2, class Result>
 struct BinaryFunction {
-  typedef Arg1    frist_argument_type;
+  typedef Arg1    first_argument_type;
   typedef Arg2    sencond_argument_type;
   typedef Result  result_type;
 };
@@ -163,6 +163,101 @@ inline
 T IdentityElement(Multiplies<T>)
 {
   return T(1);
+}
+
+/* ------------------ Adapters ----------------- */
+template <class Predicate>
+class UnaryNegate
+  : public UnaryFunction<typename Predicate::argument_type, bool> {
+public:
+  explicit UnaryNegate(const Predicate& x) : pred(x) {}
+  bool operator()(const typename Predicate::argument_type& x)
+  {
+    return !pred(x);
+  }
+protected:
+  Predicate pred;
+};
+
+template <class Predicate>
+inline UnaryNegate<Predicate> Not1(const Predicate& pred)
+{
+  return UnaryNegate<Predicate>(pred);
+}
+
+template <class Predicate>
+class BinaryNegate
+  : public BinaryFunction<typename Predicate::first_argument_type,
+                          typename Predicate::sencond_argument_type,
+                          bool> {
+public:
+  explicit BinaryNegate(const Predicate& x) : pred(x) {}
+  bool operator()(const typename Predicate::first_argument_type& x,
+                  const typename Predicate::first_argument_type& y)
+  {
+    return !pred(x, y);
+  }
+protected:
+  Predicate pred;
+};
+
+template <class Predicate>
+inline BinaryNegate<Predicate> Not2(const Predicate& pred)
+{
+  return BinaryNegate<Predicate>(pred);
+}
+
+
+template <class Operation>
+class Binder1st
+  : public UnaryFunction<typename Operation::sencond_argument_type,
+                         typename Operation::result_type> {
+public:
+  Binder1st(const Operation& x,
+            const typename Operation::first_argument_type& v)
+    : op(x), value(v) {}
+
+  typename Operation::result_type
+  operator()(const typename Operation::first_argument_type& v) const
+  {
+    return op(value, v);
+  }
+protected:
+  Operation op;
+  typename Operation::first_argument_type value;
+};
+
+template <class Operation, class T>
+inline Binder1st<Operation> Bind1st(const Operation& op, const T& x)
+{
+  typedef typename Operation::first_argument_type arg1_type;
+  return Binder1st<Operation>(op, arg1_type(x));
+}
+
+template <class Operation>
+class Binder2nd
+  : public UnaryFunction<typename Operation::first_argument_type,
+                         typename Operation::result_type> {
+public:
+  Binder2nd(const Operation& x,
+            const typename Operation::sencond_argument_type& v)
+    : op(x), value(v) {}
+
+  typename Operation::result_type
+  operator()(const typename Operation::sencond_argument_type& v) const
+  {
+    return op(value, v);
+  }
+protected:
+  Operation op;
+  typename Operation::sencond_argument_type value;
+};
+
+template <class Operation, class T>
+inline Binder2nd<Operation> Bind2nd(const Operation& op, const T& x)
+{
+  typedef typename Operation::sencond_argument_type arg2_type;
+  return Binder1st<Operation>(op, arg2_type(x));
 }
 
 
