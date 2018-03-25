@@ -4,7 +4,7 @@ gstl
 
 目的：掌握stl，练习数据结构与算法和C++ Template编程
 
-编译环境：GCC4.0 以上
+编译环境：GCC4.0 以上，目前只支持gcc）
 
 ### 开发计划：
   * STL的几大基本组件，如string、vector、list、deque、set、map、unordered_\*等
@@ -60,7 +60,6 @@ gstl
     * find_if :               100%
     * find_end :              100%
     * find_first_of           100%
-    * find_if_not :           0%
     * adjacent_find :         100%
     * count :                 100%
     * count_if :              100%
@@ -72,7 +71,7 @@ gstl
 	  * advance :               100%
     * distance :              100%
     * lower_bound             100%
-    * upper_bound             0%
+    * upper_bound             100%
 	  * sort :                  0%
 	  * generate :              100%
 	  * generate_n :            100%
@@ -94,9 +93,12 @@ gstl
     * replace_copy_if :       100%
     * reverse :               100%
     * reverse_copy :          100%
-    * transform :             0%
-    * unique :                0%
-    * unique_copy :           0%
+    * transform :             100%
+    * unique :                100%
+    * unique_copy :           100%
+    * next_permutation :      100%
+    * prev_permutation :      100%
+    * random_shuffle :        100%
 
 
 
