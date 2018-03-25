@@ -46,6 +46,8 @@ gstl
     * find :                  100%
     * copy :                  100%
     * swap :                  100%
+    * iter_swap :             100%
+    * swap_ranges :           100%
     * min、max :               100%
     * equal :                 100%
     * make_heap :             100%
@@ -59,12 +61,14 @@ gstl
     * find_end :              100%
     * find_first_of           100%
     * find_if_not :           0%
-    * adjacent_find :         0%
+    * adjacent_find :         100%
     * count :                 100%
     * count_if :              100%
     * mismatch :              100%
 	  * is_permutation :        0%
-	  * search :                0%
+	  * search :                100%
+    * search_n :              100%
+    * binary_search :         0%
 	  * advance :               100%
     * distance :              100%
     * lower_bound             100%
@@ -77,20 +81,24 @@ gstl
     * generate :              100%
     * generate_n :            100%
     * max_element :           100%
-    * min_element :           0%
-    * merge :                 0%
-    * partition :             0%
-    * remove :                0%
-    * remove_copy :           0%
-    * remove_if :             0%
-    * remove_copy_if :        0%
-    * replace :               0%
-    * replace_copy :               0%
-    * replace_if :            0%
-    * replace_copy_if :       0%
-    * reverse :               0%
-    * reverse_copy :          0%
-    * rotate :                0%
+    * min_element :           100%
+    * merge :                 100%
+    * partition :             100%
+    * remove :                100%
+    * remove_copy :           100%
+    * remove_if :             100%
+    * remove_copy_if :        100%
+    * replace :               100%
+    * replace_copy :               100%
+    * replace_if :            100%
+    * replace_copy_if :       100%
+    * reverse :               100%
+    * reverse_copy :          100%
+    * transform :             0%
+    * unique :                0%
+    * unique_copy :           0%
+
+
 
 
 * STL Functor :
