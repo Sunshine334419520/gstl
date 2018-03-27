@@ -113,18 +113,19 @@ gstl
 
 * STL Adapters :
     * reverse_iterator :      100%
-    * istream_iterator :       0%
-    * ostream_iterator :      0%
-    * insert_iterator :       0%
-    * back_insert_iterator :  0%
-    * front_insert_iterator :   0%
+    * istream_iterator :       100%
+    * ostream_iterator :      100%
+    * insert_iterator :       100%
+    * back_insert_iterator :  100%
+    * front_insert_iterator :   100%
     * not1 :      100%
     * not2 :      100%
     * bind1st :   100%
     * bind2nd :   100%
     * compose1  :   0%
     * compose2 :  0%
-    * ptr_fun     0%
+    * ptr_fun     100%
+    * mem_fun     100%
 
 * 其他组件：
     * hash_fun :                  100%
