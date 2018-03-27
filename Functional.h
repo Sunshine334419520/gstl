@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: Functional.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-23T17:00:30+08:00
+ * @Last modified time: 2018-03-27T17:25:13+08:00
  */
 
 #ifndef __GSTL_FUNCTIONAL_H
@@ -260,6 +260,157 @@ inline Binder2nd<Operation> Bind2nd(const Operation& op, const T& x)
   return Binder1st<Operation>(op, arg2_type(x));
 }
 
+/* -------------------------- ptr_fun --------------------------- */
+template <class Arg, class Result>
+class PointerUnaryFunction : public UnaryFunction<Arg, Result> {
+public:
+  PointerUnaryFunction() {}
+  explicit PointerUnaryFunction(Result (*x)(Arg)) : ptr(x) {}
+
+  Result operator()(Arg x) const { return ptr(x); }
+
+protected:
+  Result (*ptr)(Arg);
+};
+
+template <class Arg1, class Arg2, class Result>
+class PointerBinaryFunction : public BinaryFunction<Arg1, Arg2, Result> {
+public:
+  PointerBinaryFunction() {}
+  PointerBinaryFunction(Result (*x)(Arg1, Arg2)) : ptr(x) {}
+
+  Result operator()(Arg1 x, Arg2 y) const { return ptr(x, y); }
+protected:
+  Result (*ptr)(Arg1, Arg2);
+};
+
+template <class Arg, class Result>
+inline PointerUnaryFunction<Arg, Result>
+PtrFun(Result (*x)(Arg))
+{
+  return PointerUnaryFunction<Arg, Result>(x);
+}
+
+template <class Arg1, class Arg2, class Result>
+inline PointerBinaryFunction<Arg1, Arg2, Result>
+PtrFun(Result (*x)(Arg1, Arg2))
+{
+  return PointerBinaryFunction<Arg1, Arg2, Result>(x);
+}
+
+/* -------------------------- mem_fun and men_fun_ref --------------------------- */
+template <class S, class T>
+class MemFunT : public UnaryFunction<T*, S> {
+public:
+  explicit MemFunT(S (T::*pf)()) : f(pf) {}
+  S operator()(T* p) const { return (p->*f)(); }
+private:
+  S (T::*f)();
+};
+
+template <class S, class T>
+class ConstMemFunT : public UnaryFunction<const T*, S> {
+public:
+  explicit ConstMemFunT(S (T::*pf)() const) : f(pf) {}
+  S operator()(const T* p) const { return (p->*f)(); }
+private:
+  S (T::*f)() const;
+};
+
+template <class S, class T>
+class RefMemFunT : public UnaryFunction<T, S> {
+public:
+  explicit RefMemFunT(S (T::*pf)()) : f(pf) {}
+  S operator()(T& r) const { return (r.*f)(); }
+private:
+  S (T::*f)();
+};
+
+template <class S, class T>
+class ConstRefMemFunT : public UnaryFunction<T, S> {
+public:
+  explicit ConstRefMemFunT(S (T::*pf)() const) : f(pf) {}
+  S operator()(const T& r) const { return (r.*f)(); }
+private:
+  S (T::*f)() const;
+};
+
+template <class S, class T, class A>
+class MemFun1T : public BinaryFunction<T*, A, S> {
+public:
+  explicit MemFun1T(S (T::*pf)(A)) : f(pf) {}
+  S operator()(T* p, A x) const { return (p->*f)(x); }
+private:
+  S (T::*f)(A);
+};
+
+template <class S, class T, class A>
+class ConstMemFun1T : public BinaryFunction<const T*, A, S> {
+public:
+  explicit ConstMemFun1T(S (T::*pf)(A) const) : f(pf) {}
+  S operator()(const T* p, A x) const { return (p->*f)(x); }
+private:
+  S (T::*f)(A) const;
+};
+
+template <class S, class T, class A>
+class RefMemFun1T : public BinaryFunction<T, A, S> {
+public:
+  explicit RefMemFun1T(S (T::*pf)(A)) : f(pf) {}
+  S operator()(T& p, A x) const { return (p.*f)(x); }
+private:
+  S (T::*f)(A);
+};
+
+template <class S, class T, class A>
+class ConstRefMemFun1T : public BinaryFunction<T, A, S> {
+public:
+  explicit ConstRefMemFun1T(S (T::*pf)(A) const) : f(pf) {}
+  S operator()(T& p, A x) const { return (p.*f)(x); }
+private:
+  S (T::*f)(A) const;
+};
+
+
+template <class S, class T>
+inline MemFunT<S, T> MemFun(S (T::*f)()) {
+  return MemFunT<S, T>(f);
+}
+
+template <class S, class T>
+inline ConstMemFunT<S, T> MemFun(S (T::*f)() const) {
+  return ConstMemFunT<S, T>(f);
+}
+
+template <class S, class T>
+inline RefMemFunT<S, T> MemFunRef(S (T::*f)()) {
+  return RefMemFunT<S, T>(f);
+}
+
+template <class S, class T>
+inline ConstRefMemFunT<S, T> MemFunRef(S (T::*f)() const) {
+  return ConstRefMemFunT<S, T>(f);
+}
+
+template <class S, class A, class T>
+inline MemFun1T<S, T, A> MemFun1(S (T::*f)(A)) {
+  return MemFun1T<S, T, A>(f);
+}
+
+template <class S, class A, class T>
+inline ConstMemFun1T<S, T, A> MemFun1(S (T::*f)(A) const) {
+  return ConstMemFun1T<S, T, A>(f);
+}
+
+template <class S, class A, class T>
+inline RefMemFun1T<S, T, A> MemFun1(S (T::*f)(A)) {
+  return RefMemFun1T<S, T, A>(f);
+}
+
+template <class S, class A, class T>
+inline ConstRefMemFun1T<S, T, A> MemFun1(S (T::*f)(A) const) {
+  return ConstRefMemFun1T<S, T, A>(f);
+}
 
 __GSTL_END_NAMESPACE
 
