@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: String.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-29T22:12:17+08:00
+ * @Last modified time: 2018-03-31T12:39:42+08:00
  */
 
 #ifndef __GSTL_STRING_H
@@ -37,7 +37,7 @@ public:
   typedef ptrdiff_t                 difference_type;
 
   typedef reverse_iterator<const_iterator> const_reverse_iterator;
-  typedef reverse_iterator<iterator>       reverse_iterator;
+  typedef reverse_iterator<iterator> reverse_iterator;
 
 private:
   typedef SimpleAlloc<value_type, alloc> data_allocator;
@@ -71,13 +71,13 @@ public:
   const_iterator cend() const { return finish_; }
   reverse_iterator rbegin() { return reverse_iterator(end()); }
   reverse_iterator rend() { return reverse_iterator(begin()); }
-  reverse_iterator rcbegin() const { return const_reverse_iterator(end()); }
+  const_reverse_iterator rcbegin() const { return const_reverse_iterator(end()); }
   const_reverse_iterator rcend() const { return const_reverse_iterator(begin()); }
 
   bool empty() const { return start_ == finish_; }
   size_type size() const { return finish_ - start_; }
   size_type length() const { return size(); }
-  size_type max_size() const { static_cast<size_type>(-1); }
+  size_type max_size() const { (size_type)(-1); }
   size_type capacity() const { return end_of_storage_ - start_; }
   void resize(size_type n, char c);
   void resize(size_type n) { resize(n, value_type()); }
@@ -153,12 +153,8 @@ public:
 
   int compare(const String& str) const;
   int compare(size_type pos, size_type n, const String& str) const;
-  int compare(size_type pos1, size_type n1, const String& str,
-              size_type pos2, size_type n2) const;
   int compare(const char* str) const;
   int compare(size_type pos, size_type n, const char* str) const;
-  int compare(size_type pos1, size_type n1, const char* str,
-              size_type pos2, size_type n2) const;
 
   void swap(String& str)
   {
@@ -176,7 +172,7 @@ public:
   size_type rfind(char c, size_type pos = npos) const;
   size_type rfind(const char* s, size_type pos = npos) const;
   size_type rfind(const char* s, size_type pos, size_type n) const;
-  size_type rfind(const String& s, size_type pos = 0) const;
+  size_type rfind(const String& s, size_type pos = npos) const;
 
   size_type find_first_of(char c, size_type pos = 0) const;
   size_type find_first_of(const char* s, size_type pos = 0) const;
@@ -186,7 +182,7 @@ public:
   size_type find_first_not_of(char c, size_type pos = 0) const;
   size_type find_first_not_of(const char* s, size_type pos = 0) const;
   size_type find_first_not_of(const char* s, size_type pos, size_type n) const;
-  size_type find_first_not_of(const String& str, size_type pos = 0);
+  size_type find_first_not_of(const String& str, size_type pos = 0) const;
 
   size_type find_last_of(char c, size_type pos = npos) const;
   size_type find_last_of(const char* s, size_type pos = npos) const;
@@ -221,12 +217,13 @@ private:
   void insert_aux_copy(iterator it, InputIterator first, InputIterator last);
   void insert_aux_fill(iterator it, size_type n, value_type value);
   void string_aux(size_t n, char c, std::true_type);
-	template<class InputIterator>
-	void string_aux(InputIterator first, InputIterator last, std::false_type);
+	//template<class InputIterator>
+	//void string_aux(InputIterator first, InputIterator last, std::false_type);
   template <class InputIterator>
   void append_aux(InputIterator first, InputIterator last);
   void MoveData(String& s);
-  size_type check_len_equal_npos(size_type n, size_type max_len, size_type start_len);
+  size_type check_len_equal_npos(size_type n, size_type max_len, size_type start_len) const;
+  bool is_contained(value_type value, const_iterator first, const_iterator last) const;
 public:
   static const size_t npos = -1;
 private:
@@ -351,6 +348,45 @@ void String::append_aux(InputIterator first, InputIterator last)
   finish_ = new_finish;
   end_of_storage_ = start_ + new_size;
 
+}
+
+template <class InputIterator>
+String& String::replace(iterator first1, iterator last1,
+                        InputIterator first2, InputIterator last2)
+{
+  const size_type n1 = last1 - first1;
+  const size_type n2 = last2 - first2;
+
+  if (n1 > n2) {
+    try {
+      iterator cur = uninitialized_copy(first2, last2, first1);
+      cur = uninitialized_copy(last1, finish_, cur);
+      Destroy(cur, finish_);
+      finish_ = cur;
+    }
+    catch(...) {
+      clear();
+      deallocate();
+      throw;
+    }
+  }
+  else if (n2 > n1){
+    //const difference_type n = n2 - n1;
+    try {
+      uninitialized_copy(first2, first2 + n1, first1);
+      insert(last1, first2 + n1, last2);
+    }
+    catch(...) {
+      clear();
+      deallocate();
+      throw;
+    }
+
+  }
+  else
+    uninitialized_copy(first2, last2, first1);
+
+  return *this;
 }
 
 /*
