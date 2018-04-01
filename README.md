@@ -17,7 +17,7 @@ gstl
     * iterator :              100%
     * reverse_iterator :      100%
     * vector :                100%
-    * string :                0%
+    * string :                100%
     * PriorityQueue :        100%
     * stack :                 100%
     * deque :                 100%
@@ -54,9 +54,6 @@ gstl
     * pop_heap :              100%
     * push_heap :             100%
     * sort_heap :             100%
-    * all_of :                0%
-    * any_of :                0%
-    * none_of :               0%
     * find_if :               100%
     * find_end :              100%
     * find_first_of           100%
@@ -64,7 +61,7 @@ gstl
     * count :                 100%
     * count_if :              100%
     * mismatch :              100%
-	  * is_permutation :        0%
+	  * is_permutation :        100%
 	  * search :                100%
     * search_n :              100%
     * binary_search :         0%
@@ -141,11 +138,10 @@ gstl
 ##TinySTL单元测试(原单元测试代码逐步)：
 
   * vector：                       100%
-  * string：                       0%
+  * string：                       100%
   * pair：                         100%
   * algorithm：                    20%
   * priority_queue：               100%
-  * suffix_array：                 0%
   * queue：                        100%
   * stack：                        100%
   * bitmap：                       0%
@@ -165,6 +161,6 @@ gstl
   * unordered_set：                0%
   * directed_graph：               0%
   * trie tree：                    0%
-  * unique_ptr：                   0%
-  * shared_ptr：                   0%
+  * unique_ptr：                   100%
+  * SmartPtr :                   100%
   * Disjoint-set data structure：100%
