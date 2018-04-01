@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: String.h
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-31T12:39:42+08:00
+ * @Last modified time: 2018-03-31T22:12:22+08:00
  */
 
 #ifndef __GSTL_STRING_H
@@ -16,6 +16,7 @@
 #include "ReverseIterator.h"
 #include "Algorithm.h"
 #include "Uninitialized.h"
+#include "Relops.h"
 #include <cstdlib>
 #include <cstddef>
 #include <iostream>
@@ -36,8 +37,9 @@ public:
   typedef size_t                    size_type;
   typedef ptrdiff_t                 difference_type;
 
+
   typedef reverse_iterator<const_iterator> const_reverse_iterator;
-  typedef reverse_iterator<iterator> reverse_iterator;
+  typedef reverse_iterator<char*> reverse_it;
 
 private:
   typedef SimpleAlloc<value_type, alloc> data_allocator;
@@ -69,15 +71,15 @@ public:
   const_iterator end() const { return finish_; }
   const_iterator cbegin() const { return start_; }
   const_iterator cend() const { return finish_; }
-  reverse_iterator rbegin() { return reverse_iterator(end()); }
-  reverse_iterator rend() { return reverse_iterator(begin()); }
+  reverse_it rbegin() { return reverse_it(end()); }
+  reverse_it rend() { return reverse_it(begin()); }
   const_reverse_iterator rcbegin() const { return const_reverse_iterator(end()); }
   const_reverse_iterator rcend() const { return const_reverse_iterator(begin()); }
 
   bool empty() const { return start_ == finish_; }
   size_type size() const { return finish_ - start_; }
   size_type length() const { return size(); }
-  size_type max_size() const { (size_type)(-1); }
+  size_type max_size() const { return (size_type)(-1); }
   size_type capacity() const { return end_of_storage_ - start_; }
   void resize(size_type n, char c);
   void resize(size_type n) { resize(n, value_type()); }
@@ -385,9 +387,30 @@ String& String::replace(iterator first1, iterator last1,
   }
   else
     uninitialized_copy(first2, last2, first1);
-
   return *this;
 }
+
+String operator+(const String& str1, const String& str2);
+String operator+(const String& str, const char* s);
+String operator+(const char* s, const String& str);
+std::ostream& operator<<(std::ostream& out, const String& str);
+std::istream& operator>>(std::istream& is, String& str);
+std::istream& getline(std::istream& is, String& str, char separator = '\n');
+bool operator==(const String& str1, const String& str2);
+bool operator<(const String& str1, const String& str2);
+bool operator==(const String& str, const char* s);
+bool operator==(const char* s, const String& str);
+bool operator<(const String& str, const char* s);
+bool operator<(const char* s, const String& str);
+bool operator!=(const String& str, const char* s);
+bool operator!=(const char* s, const String& str);
+bool operator>(const String& str, const char* s);
+bool operator>(const char* s, const String& str);
+bool operator>=(const String& str, const char* s);
+bool operator>=(const char* s, const String& str);
+bool operator<=(const String& str, const char* s);
+bool operator<=(const char* s, const String& str);
+void swap(const String& str1, const String& str2);
 
 /*
 template<class InputIterator>

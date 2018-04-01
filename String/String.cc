@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: String.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2018-03-31T12:39:35+08:00
+ * @Last modified time: 2018-04-01T10:29:59+08:00
  */
 
 #include "String/String.hpp"
@@ -114,6 +114,7 @@ void String::insert(iterator it, size_type n, value_type value)
     try {
       copy_backward(it, finish_, new_finish);
       uninitialized_fill_n(it, n, value);
+      finish_ = new_finish;
     }
     catch(...) {
       clear();
@@ -165,6 +166,7 @@ String& String::append(size_type n, value_type value)
 
 String& String::erase(size_type pos, size_type len)
 {
+  len = check_len_equal_npos(len, size(), pos);
   erase(start_ + pos, start_ + pos + len);
   return *this;
 }
@@ -192,6 +194,7 @@ typename String::iterator String::erase(iterator first, iterator last)
   } else
     Destroy(first, finish_);
   finish_ -= (last - first);
+  *finish_ = '\0';
   return first;
 }
 
@@ -230,7 +233,7 @@ String& String::replace(iterator first, iterator last, const char* s)
 
 int String::compare(const String& str) const
 {
-  return strcmp(this->start_, str.start_);
+  return strcmp(this->start_, str.begin());
 }
 int String::compare(size_type pos, size_type n, const String& str) const
 {
@@ -575,14 +578,18 @@ std::ostream& operator<<(std::ostream& out, const String& str)
 std::istream& operator>>(std::istream& is, String& str)
 {
     str.clear();
-    char* s;
-    is >> s;
-    str.insert(0, s);
+    char ch;
+    while (is.get(ch)) {
+      if (ch != EOF && !isblank(ch) && ch != '\n')
+        str.push_back(ch);
+      else
+        break;
+    }
 
     return is;
 }
 
-std::istream& getline(std::istream& is, String& str, char separator = '\n')
+std::istream& getline(std::istream& is, String& str, char separator)
 {
   str.clear();
   char ch;
@@ -626,7 +633,7 @@ bool operator<(const char* s, const String& str)
 
 bool operator!=(const String& str, const char* s)
 {
-  return !(str != s);
+  return !(str == s);
 }
 
 bool operator!=(const char* s, const String& str)
@@ -664,6 +671,10 @@ bool operator<=(const char* s, const String& str)
   return !(str < s);
 }
 
+void swap(String& str1, String& str2)
+{
+  str1.swap(str2);
+}
 
 
 __GSTL_END_NAMESPACE
